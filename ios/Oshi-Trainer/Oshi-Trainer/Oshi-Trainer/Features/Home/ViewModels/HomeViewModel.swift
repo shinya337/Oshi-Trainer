@@ -24,13 +24,10 @@ class HomeViewModel: ObservableObject {
     }
 
     func updateDialogue() {
-        let dialogues = [
-            "今日もトレーニング頑張ろう！💪",
-            "一緒に成長していこうね！✨",
-            "あなたなら絶対できる！",
-            "休憩も大切だよ😊",
-            "素晴らしい！その調子！🎉"
-        ]
-        currentDialogue = dialogues.randomElement() ?? dialogues[0]
+        updateDialogue(for: .encouragement)
+    }
+
+    func updateDialogue(for category: DialogueTemplateProvider.DialogueCategory) {
+        currentDialogue = DialogueTemplateProvider.getDialogue(for: category)
     }
 }

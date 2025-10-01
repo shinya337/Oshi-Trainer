@@ -11,6 +11,27 @@ struct HomeView: View {
                 // 背景
                 Color.oshiBackground
                     .ignoresSafeArea()
+                    .zIndex(-1)
+
+                // ピンクグラデーション背景
+                GeometryReader { geometry in
+                    VStack(spacing: 0) {
+                        Spacer()
+                        LinearGradient(
+                            colors: [
+                                Color.oshiPink.opacity(0.3),
+                                Color.oshiPinkLight.opacity(0.15),
+                                Color.clear
+                            ],
+                            startPoint: .bottom,
+                            endPoint: .top
+                        )
+                        .frame(height: geometry.size.height * 0.7)
+                    }
+                }
+                .ignoresSafeArea(edges: .bottom)
+                .allowsHitTesting(false)
+                .zIndex(-0.5)
 
                 VStack(spacing: 0) {
                     // ヘッダー
@@ -71,51 +92,38 @@ struct HomeView: View {
 
             Spacer()
 
-            // 右上：推し作成ボタン
-            NavigationLink(destination: TrainerCreationView()) {
-                HStack(spacing: 4) {
-                    Image(systemName: "person.badge.plus")
-                    Text("推し作成")
+            // 右上：設定ボタン
+            NavigationLink(destination: SettingsView()) {
+                VStack(spacing: 4) {
+                    Image(systemName: "gearshape.fill")
+                        .font(.system(size: 32))
+                    Text("設定")
+                        .font(.system(size: 14, weight: .semibold, design: .rounded))
                 }
-                .font(.system(size: 16, weight: .semibold, design: .rounded))
             }
-            .buttonStyle(OshiSecondaryButtonStyle(size: 16))
+            .buttonStyle(OshiIconButtonStyle(size: 32))
         }
     }
 
     // MARK: - Character Image Layer (下から生えている感じ)
     private var characterImageLayer: some View {
         GeometryReader { geometry in
-            Button(action: {
-                showTrainingPopup = true
-                viewModel.updateDialogue()
-            }) {
-                VStack(spacing: 0) {
-                    Spacer()
-
-                    ZStack(alignment: .bottom) {
-                        // グラデーション背景（下から上へ）
-                        LinearGradient(
-                            colors: [
-                                Color.oshiGreen.opacity(0.3),
-                                Color.oshiGreen.opacity(0.1),
-                                Color.clear
-                            ],
-                            startPoint: .bottom,
-                            endPoint: .top
-                        )
-                        .frame(height: geometry.size.height * 0.7)
-
-                        // キャラクター画像（縦長、下部が切れる）
-                        Image(systemName: viewModel.oshiTrainer.imageName)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: geometry.size.width * 0.7, height: geometry.size.height * 0.75)
-                            .foregroundColor(.oshiGreen.opacity(0.8))
-                            .offset(y: geometry.size.height * 0.15) // 下にオフセットして下部を切る
+            // キャラクター画像（透過PNG、アルファヒット判定付き）
+            HStack {
+                Spacer()
+                TransparentImageView(
+                    imageName: viewModel.oshiTrainer.imageName,
+                    onTap: {
+                        showTrainingPopup = true
+                        viewModel.updateDialogue(for: .trainingStart)
                     }
-                }
+                )
+                .frame(height: geometry.size.height * 0.7)
+                .scaleEffect(1.6) // 160%のサイズ
+                Spacer()
             }
+            .frame(width: geometry.size.width, height: geometry.size.height * 0.7)
+            .position(x: geometry.size.width / 2, y: geometry.size.height - (geometry.size.height * 0.7 / 2))
             .scaleEffect(showTrainingPopup ? 0.98 : 1.0)
             .animation(.spring(response: 0.3), value: showTrainingPopup)
         }
@@ -123,18 +131,26 @@ struct HomeView: View {
 
     // MARK: - Dialogue Bubble
     private var dialogueBubble: some View {
-        Text(viewModel.currentDialogue)
-            .font(.system(size: 18, weight: .medium, design: .rounded))
-            .foregroundColor(.oshiTextPrimary)
-            .padding(.horizontal, 24)
-            .padding(.vertical, 16)
-            .frame(maxWidth: .infinity)
-            .background(
-                RoundedRectangle(cornerRadius: 20)
-                    .fill(Color.oshiBackgroundSecondary)
-                    .shadow(color: .black.opacity(0.15), radius: 12, x: 0, y: 4)
-            )
-            .multilineTextAlignment(.center)
+        VStack(spacing: 4) {
+            // キャラ名
+            Text(viewModel.oshiTrainer.name)
+                .font(.system(size: 16, weight: .bold, design: .rounded))
+                .foregroundColor(.oshiTextSecondary)
+
+            // セリフ
+            Text(viewModel.currentDialogue)
+                .font(.system(size: 18, weight: .medium, design: .rounded))
+                .foregroundColor(.oshiTextPrimary)
+        }
+        .padding(.horizontal, 24)
+        .padding(.vertical, 16)
+        .frame(maxWidth: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color.oshiBackgroundSecondary)
+                .shadow(color: .black.opacity(0.15), radius: 12, x: 0, y: 4)
+        )
+        .multilineTextAlignment(.center)
     }
 
     // MARK: - Footer
@@ -153,12 +169,14 @@ struct HomeView: View {
 
             Spacer()
 
-            // 右下：設定ボタン
-            NavigationLink(destination: SettingsView()) {
+            // 右下：推しボタン（推しの情報・作成）
+            Button(action: {
+                showLevelDetail = true
+            }) {
                 VStack(spacing: 4) {
-                    Image(systemName: "gearshape.fill")
+                    Image(systemName: "heart.circle.fill")
                         .font(.system(size: 32))
-                    Text("設定")
+                    Text("推し")
                         .font(.system(size: 14, weight: .semibold, design: .rounded))
                 }
             }

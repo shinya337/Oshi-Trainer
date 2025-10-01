@@ -6,13 +6,9 @@ class MockDataService: DataServiceProtocol {
     private init() {}
 
     func getOshiTrainer() -> OshiTrainer {
-        return OshiTrainer(
-            name: "推しトレーナー",
-            level: 10,
-            experience: 2450,
-            imageName: "person.fill", // SF Symbol（プレースホルダー）
-            currentDialogue: "今日もトレーニング頑張ろう！💪"
-        )
+        var trainer = DefaultOshiTrainerData.oshiAi
+        trainer.currentDialogue = DialogueTemplateProvider.getDialogue(for: .greeting)
+        return trainer
     }
 
     func getLevelData() -> (level: Int, experience: Int, achievements: [Achievement]) {

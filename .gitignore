@@ -1,6 +1,8 @@
 # Kiro spec-driven development
+.claude/
 .kiro/
 CLAUDE.md
+image/
 
 # Xcode
 .DS_Store
