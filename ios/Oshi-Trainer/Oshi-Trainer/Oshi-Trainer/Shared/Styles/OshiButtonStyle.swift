@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct OshiButtonStyle: ButtonStyle {
-    var color: Color = .oshiGreen
+    var color: Color = .oshiPink
     var size: CGFloat = 36
 
     func makeBody(configuration: Configuration) -> some View {
@@ -32,11 +32,11 @@ struct OshiSecondaryButtonStyle: ButtonStyle {
             .padding(.horizontal, 20)
             .padding(.vertical, 10)
             .background(Color.oshiBackgroundSecondary)
-            .foregroundColor(.oshiGreen)
+            .foregroundColor(.oshiPink)
             .cornerRadius(16)
             .overlay(
                 RoundedRectangle(cornerRadius: 16)
-                    .stroke(Color.oshiGreen, lineWidth: 2)
+                    .stroke(Color.oshiPink, lineWidth: 2)
             )
             .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
             .animation(.spring(response: 0.3), value: configuration.isPressed)
@@ -55,7 +55,7 @@ struct OshiIconButtonStyle: ButtonStyle {
                     .fill(Color.oshiBackgroundSecondary)
                     .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
             )
-            .foregroundColor(.oshiGreen)
+            .foregroundColor(.oshiPink)
             .scaleEffect(configuration.isPressed ? 0.9 : 1.0)
             .animation(.spring(response: 0.3), value: configuration.isPressed)
     }
