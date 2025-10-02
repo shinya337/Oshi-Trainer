@@ -18,7 +18,7 @@ final class MockDataServiceTests: XCTestCase {
         XCTAssertEqual(trainer.name, "推乃 愛")
         XCTAssertEqual(trainer.level, 1)
         XCTAssertEqual(trainer.experience, 0)
-        XCTAssertEqual(trainer.imageName, "OshiAi")
+        XCTAssertEqual(trainer.imageName, "Oshino-Ai")
     }
 
     func testGetOshiTrainerReturnsNonEmptyDialogue() {

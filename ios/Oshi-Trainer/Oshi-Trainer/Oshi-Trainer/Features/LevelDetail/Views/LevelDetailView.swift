@@ -3,6 +3,7 @@ import SwiftUI
 struct LevelDetailView: View {
     @StateObject private var viewModel = LevelDetailViewModel()
     @Environment(\.dismiss) private var dismiss
+    var themeColor: String = "pink"
 
     var body: some View {
         NavigationStack {
@@ -24,14 +25,18 @@ struct LevelDetailView: View {
                     .padding()
                 }
             }
-            .navigationTitle("推しレベル")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("推しレベル")
+                        .font(.system(size: 20, weight: .bold, design: .rounded))
+                        .foregroundColor(Color.oshiThemeColor(from: themeColor))
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("閉じる") {
                         dismiss()
                     }
-                    .foregroundColor(.oshiGreen)
+                    .foregroundColor(Color.oshiThemeColor(from: themeColor))
                 }
             }
         }

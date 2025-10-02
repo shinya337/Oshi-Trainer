@@ -31,7 +31,7 @@ final class HomeViewModelTests: XCTestCase {
 
     func testUpdateDialogueChangesDialogue() {
         // Given: 初期セリフ
-        let initialDialogue = viewModel.currentDialogue
+        _ = viewModel.currentDialogue
 
         // When: セリフを更新
         viewModel.updateDialogue(for: .trainingStart)

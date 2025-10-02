@@ -31,7 +31,7 @@ final class DefaultOshiTrainerDataTests: XCTestCase {
         // Given: デフォルトトレーナー
         let trainer = DefaultOshiTrainerData.oshiAi
 
-        // Then: 画像名が"OshiAi"であること
-        XCTAssertEqual(trainer.imageName, "OshiAi")
+        // Then: 画像名が"Oshino-Ai"であること
+        XCTAssertEqual(trainer.imageName, "Oshino-Ai")
     }
 }

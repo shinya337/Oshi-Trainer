@@ -3,6 +3,10 @@
 .kiro/
 CLAUDE.md
 image/
+audio/
+Resources/
+Services/Audio/
+.venv/
 
 # Xcode
 .DS_Store

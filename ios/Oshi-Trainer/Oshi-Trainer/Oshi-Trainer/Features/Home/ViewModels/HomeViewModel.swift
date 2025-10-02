@@ -3,6 +3,7 @@ import Combine
 
 class HomeViewModel: ObservableObject {
     @Published var oshiTrainer: OshiTrainer
+    @Published var oshiTemplate: OshiTrainerTemplate
     @Published var currentDialogue: String
     @Published var oshiLevel: Int
 
@@ -12,6 +13,7 @@ class HomeViewModel: ObservableObject {
         self.dataService = dataService
         let trainer = dataService.getOshiTrainer()
         self.oshiTrainer = trainer
+        self.oshiTemplate = DefaultOshiTrainerData.oshiAiTemplate
         self.currentDialogue = trainer.currentDialogue
         self.oshiLevel = trainer.level
     }

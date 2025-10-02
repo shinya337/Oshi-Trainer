@@ -13,14 +13,14 @@ struct HomeView: View {
                     .ignoresSafeArea()
                     .zIndex(-1)
 
-                // ピンクグラデーション背景
+                // 動的テーマカラーグラデーション背景
                 GeometryReader { geometry in
                     VStack(spacing: 0) {
                         Spacer()
                         LinearGradient(
                             colors: [
-                                Color.oshiPink.opacity(0.3),
-                                Color.oshiPinkLight.opacity(0.15),
+                                Color.oshiThemeColor(from: viewModel.oshiTemplate.themeColor).opacity(0.3),
+                                Color.oshiThemeColorLight(from: viewModel.oshiTemplate.themeColor).opacity(0.15),
                                 Color.clear
                             ],
                             startPoint: .bottom,
@@ -64,7 +64,7 @@ struct HomeView: View {
                 .zIndex(1)
             }
             .sheet(isPresented: $showLevelDetail) {
-                LevelDetailView()
+                LevelDetailView(themeColor: viewModel.oshiTemplate.themeColor)
             }
             .sheet(isPresented: $showTrainingPopup) {
                 TrainingPopupView()
@@ -93,7 +93,7 @@ struct HomeView: View {
             Spacer()
 
             // 右上：設定ボタン
-            NavigationLink(destination: SettingsView()) {
+            NavigationLink(destination: SettingsView(themeColor: viewModel.oshiTemplate.themeColor)) {
                 VStack(spacing: 4) {
                     Image(systemName: "gearshape.fill")
                         .font(.system(size: 32))
@@ -101,7 +101,7 @@ struct HomeView: View {
                         .font(.system(size: 14, weight: .semibold, design: .rounded))
                 }
             }
-            .buttonStyle(OshiIconButtonStyle(size: 32))
+            .buttonStyle(OshiIconButtonStyle(size: 32, accentColor: Color.oshiThemeColor(from: viewModel.oshiTemplate.themeColor)))
         }
     }
 
@@ -157,7 +157,7 @@ struct HomeView: View {
     private var footerView: some View {
         HStack {
             // 左下：統計ボタン
-            NavigationLink(destination: StatisticsView()) {
+            NavigationLink(destination: StatisticsView(themeColor: viewModel.oshiTemplate.themeColor)) {
                 VStack(spacing: 4) {
                     Image(systemName: "chart.bar.fill")
                         .font(.system(size: 32))
@@ -165,7 +165,7 @@ struct HomeView: View {
                         .font(.system(size: 14, weight: .semibold, design: .rounded))
                 }
             }
-            .buttonStyle(OshiIconButtonStyle(size: 32))
+            .buttonStyle(OshiIconButtonStyle(size: 32, accentColor: Color.oshiThemeColor(from: viewModel.oshiTemplate.themeColor)))
 
             Spacer()
 
@@ -180,7 +180,7 @@ struct HomeView: View {
                         .font(.system(size: 14, weight: .semibold, design: .rounded))
                 }
             }
-            .buttonStyle(OshiIconButtonStyle(size: 32))
+            .buttonStyle(OshiIconButtonStyle(size: 32, accentColor: Color.oshiThemeColor(from: viewModel.oshiTemplate.themeColor)))
         }
     }
 }
