@@ -4,6 +4,12 @@ audio/
 Resources/
 .venv/
 
+# Machine Learning Models
+*.pt
+*.onnx
+*.mlmodel
+*.mlpackage
+
 # Xcode
 .DS_Store
 build/

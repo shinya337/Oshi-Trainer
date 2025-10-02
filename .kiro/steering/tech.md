@@ -28,24 +28,19 @@
 - **Speech Synthesis** (Future): 推しの声によるフィードバック
 
 #### Pythonプロトタイプ（実験中）
-**共通技術スタック**:
-- **YOLO Pose Estimation**: YOLOv11n-poseモデル（`yolo11n-pose.pt`）
+**技術スタック**:
+- **YOLO Pose Estimation**: YOLOv11n-poseモデル（`yolo11n-pose.pt`, 6.2MB）
 - **OpenCV**: リアルタイムビデオ処理とカメラキャプチャ
 - **Ultralytics**: YOLOモデル推論エンジン
 - **NumPy**: 数値計算とキーポイント解析
 - **pygame**: 音声フィードバック再生
 - **Collections (deque)**: スムージング用の履歴管理
 
-**エクササイズ別実装**:
+**実装済みエクササイズ**:
 - **オーバーヘッドプレス**（`main_overheadpress.py`）:
   - ルールベース判定: 肘の開きエラー（肩幅正規化）、速度判定、角度ベースレップカウント
-  - ずんだもん音声アセット（48ファイル）
-- **スクワット**（`main_squat.py`）:
-  - ルールベース判定: 膝の揺れエラー（Knees Inward）、速度判定、深さ比率レップカウント
-  - 音声フィードバック: knees_inward.wav, too_fast.wav, too_slow.wav
-- **プッシュアップ**（`main_pushup.py`）:
-  - 姿勢推定ベースのフォーム解析
-  - レップカウント機能
+  - ずんだもん音声フィードバック（48音声ファイル使用）
+  - キーポイント: 肩、肘、手首
 
 **モデル変換ツール**:
 - **convert_models.py**: YOLOモデルをCore ML形式に変換するユーティリティ
@@ -156,9 +151,6 @@ cd python
 
 # オーバーヘッドプレス解析
 python main_overheadpress.py
-
-# スクワット解析
-python main_squat.py
 
 # 依存関係インストール（初回のみ）
 pip install ultralytics opencv-python numpy pygame

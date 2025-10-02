@@ -8,12 +8,10 @@
 Oshi-Trainer/
 ├── ios/                          # iOSアプリケーション本体
 │   └── Oshi-Trainer/            # Xcodeプロジェクトディレクトリ
-├── python/                       # 🧪 姿勢推定プロトタイプ（実験中・複数エクササイズ対応）
+├── python/                       # 🧪 姿勢推定プロトタイプ（実験中）
 │   ├── main_overheadpress.py    # オーバーヘッドプレス姿勢解析スクリプト
-│   ├── main_squat.py            # スクワット姿勢解析スクリプト
-│   ├── main_pushup.py           # プッシュアップ姿勢解析スクリプト
 │   ├── convert_models.py        # YOLOモデルのCore ML変換ユーティリティ
-│   ├── yolo11n-pose.pt          # YOLOv11 Poseモデルファイル（共通）
+│   ├── yolo11n-pose.pt          # YOLOv11 Poseモデルファイル（6.2MB）
 │   └── .venv/                   # Python仮想環境
 ├── 参考プログラム/                # 📚 リアルタイムフォーム解析の参考実装
 │   ├── CameraManager.swift      # カメラセッション管理の参考実装
@@ -30,8 +28,7 @@ Oshi-Trainer/
 │   └── specs/                   # 機能仕様書
 │       ├── oshi-trainer-frontend-ui/      # ホーム画面UI仕様
 │       ├── default-oshi-trainer/          # デフォルトトレーナー仕様
-│       ├── oshi-trainer-template/         # 推しトレーナーテンプレート仕様
-│       └── realtime-form-analysis/        # リアルタイムフォーム解析仕様（設計完了）
+│       └── oshi-trainer-template/         # 推しトレーナーテンプレート仕様
 ├── .claude/                      # Claude Code設定
 │   └── commands/                # カスタムスラッシュコマンド
 ├── README.md                     # プロジェクト概要
@@ -269,44 +266,32 @@ audio/
 
 ## Python Prototype Structure
 
-### Proof-of-Concept: Multi-Exercise Pose Estimation System
+### Proof-of-Concept: Pose Estimation System
 
 ```
 python/
 ├── main_overheadpress.py       # オーバーヘッドプレス解析スクリプト
-├── main_squat.py               # スクワット解析スクリプト
-├── main_pushup.py              # プッシュアップ解析スクリプト
 ├── convert_models.py           # YOLOモデルのCore ML変換ユーティリティ
-├── yolo11n-pose.pt             # YOLOv11 Poseモデル（6.2MB、共通）
+├── yolo11n-pose.pt             # YOLOv11 Poseモデル（6.2MB）
 └── .venv/                      # Python仮想環境（依存関係インストール済み）
 ```
 
 **注**: Pythonプロトタイプの音声機能は、iOS用の`audio/ずんだもん/`アセットに移行済み
 
-### Prototype Features（共通機能）
+### Prototype Features
 - **リアルタイム姿勢推定**: YOLOv11でキーポイント検出
 - **ルールベースフォーム解析**: エクササイズ固有のエラー判定ロジック
 - **レップカウント**: キーポイント位置/角度による動作カウント
 - **速度判定**: フレーム数ベースの速度チェック（早すぎる/遅すぎる）
-- **音声フィードバック**: pygameによる非同期音声再生
+- **音声フィードバック**: pygameによる音声再生
 
-### Exercise-Specific Implementations
+### Current Implementation
 
 #### オーバーヘッドプレス（`main_overheadpress.py`）
 - **キーポイント**: 肩、肘、手首
 - **エラー検出**: 肘の開きエラー（肩幅正規化）
 - **カウント方式**: 肘角度の閾値判定
-- **音声**: ずんだもん音声（48ファイル）
-
-#### スクワット（`main_squat.py`）
-- **キーポイント**: 肩、腰、膝
-- **エラー検出**: 膝の揺れエラー（Knees Inward）
-- **カウント方式**: 深さ比率（Depth Ratio）による判定
-- **音声**: knees_inward.wav, too_fast.wav, too_slow.wav
-
-#### プッシュアップ（`main_pushup.py`）
-- **キーポイント**: 姿勢推定ベース
-- **カウント方式**: レップカウント機能
+- **音声**: ずんだもん音声フィードバック（48音声ファイル）
 
 ### iOS統合への移行計画
 1. **YOLOモデルのCore ML変換**: `yolo11n-pose.pt` → `.mlmodel`
