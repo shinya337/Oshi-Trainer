@@ -1,11 +1,7 @@
 # Kiro spec-driven development
-.claude/
-.kiro/
-CLAUDE.md
 image/
 audio/
 Resources/
-Services/Audio/
 .venv/
 
 # Xcode
