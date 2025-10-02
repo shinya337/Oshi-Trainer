@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct SettingsView: View {
+    var themeColor: String = "pink"
+
     var body: some View {
         ZStack {
             Color.oshiBackground
@@ -20,8 +22,14 @@ struct SettingsView: View {
                 .padding()
             }
         }
-        .navigationTitle("設定")
-        .navigationBarTitleDisplayMode(.large)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text("設定")
+                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                    .foregroundColor(Color.oshiThemeColor(from: themeColor))
+            }
+        }
     }
 
     // MARK: - Settings Section

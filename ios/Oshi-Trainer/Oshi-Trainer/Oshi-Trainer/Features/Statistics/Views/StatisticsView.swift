@@ -2,6 +2,7 @@ import SwiftUI
 
 struct StatisticsView: View {
     @StateObject private var viewModel = StatisticsViewModel()
+    var themeColor: String = "pink"
 
     var body: some View {
         ZStack {
@@ -22,8 +23,14 @@ struct StatisticsView: View {
                 .padding()
             }
         }
-        .navigationTitle("統計")
-        .navigationBarTitleDisplayMode(.large)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text("統計")
+                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                    .foregroundColor(Color.oshiThemeColor(from: themeColor))
+            }
+        }
     }
 
     // MARK: - Overall Stats Card

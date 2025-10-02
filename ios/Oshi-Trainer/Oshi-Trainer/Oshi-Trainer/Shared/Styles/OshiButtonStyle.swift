@@ -45,6 +45,7 @@ struct OshiSecondaryButtonStyle: ButtonStyle {
 
 struct OshiIconButtonStyle: ButtonStyle {
     var size: CGFloat = 28
+    var accentColor: Color = .oshiPink
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
@@ -55,7 +56,7 @@ struct OshiIconButtonStyle: ButtonStyle {
                     .fill(Color.oshiBackgroundSecondary)
                     .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
             )
-            .foregroundColor(.oshiPink)
+            .foregroundColor(accentColor)
             .scaleEffect(configuration.isPressed ? 0.9 : 1.0)
             .animation(.spring(response: 0.3), value: configuration.isPressed)
     }
