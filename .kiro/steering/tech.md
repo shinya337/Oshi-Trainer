@@ -71,34 +71,65 @@
 ## Data & Storage
 
 ### Local Storage Options
-- **UserDefaults**: 設定や小規模データの永続化
+- **UserDefaults**: 設定や小規模データの永続化（✅ トレーナーテンプレートで使用中）
+- **FileManager**: ファイルベースのデータ管理（✅ トレーナー画像で使用中）
 - **Core Data**: 構造化データの永続化（今後実装予定）
-- **FileManager**: ファイルベースのデータ管理
 
 ### Data Service Layer
 - **DataServiceProtocol**: データアクセスの抽象化レイヤー
   - `getOshiTrainer()`: 推しトレーナーデータの取得
   - `getLevelData()`: レベル、経験値、実績データの取得
   - `getStatistics()`: 統計データの取得
+  - `getAllTrainerTemplates()`: 全トレーナーテンプレートの取得
+  - `saveTrainerTemplate(_:)`: トレーナーテンプレートの保存
+  - `getTrainerTemplate(by:)`: ID指定トレーナーテンプレートの取得
+
 - **MockDataService**: 開発用モックデータサービス（`DataServiceProtocol`の実装）
   - UI開発時のダミーデータ提供
-  - 実際のデータ永続化実装前の開発を可能にする
+  - メモリ内トレーナーテンプレート管理
   - デフォルト推しトレーナー「推乃 愛」のデータ提供
+
+- **UserDefaultsDataService**: UserDefaultsベースのデータ永続化（✅ 実装済み）
+  - JSONエンコード/デコードによるトレーナーテンプレート保存
+  - 保存キー: `"trainerTemplates"`
+  - デフォルトトレーナー + ユーザー作成トレーナーの管理
+  - アプリ再起動後もデータ保持
+
+- **ImagePersistenceService**: 画像ファイル管理サービス（✅ 実装済み）
+  - **保存場所**: `Documents/TrainerImages/` ディレクトリ
+  - **ファイル形式**: PNG形式、UUID.pngファイル名
+  - **機能**:
+    - `saveImage(_:)`: UIImageをPNG形式で保存、UUIDファイル名を返却
+    - `loadImage(fileName:)`: ファイル名からUIImageを読み込み
+    - `deleteImage(fileName:)`: 画像ファイルの削除
+  - **エラーハンドリング**: ディレクトリ作成失敗、画像変換失敗、保存失敗
+
 - **DialogueTemplateProvider**: テンプレートセリフ提供サービス
   - ツンデレ性格のセリフテンプレート管理
   - カテゴリー別セリフ取得（挨拶、トレーニング開始、応援、照れ隠し）
   - 将来的なLLM統合への移行を考慮した設計
 
+### Data Persistence Strategy
+現在の実装（ライトウェイト、~10トレーナー想定）:
+- **トレーナーテンプレート**: UserDefaults（JSON形式）
+- **画像ファイル**: ファイルシステム（Documents/TrainerImages/）
+- **画像参照**: テンプレート内にファイル名（UUID.png）を保存
+
+将来的な移行（トレーナー数増加時）:
+- Core Dataへの移行を検討（100人以上、複雑な検索が必要になった場合）
+- iCloud同期機能の追加
+
 ### Audio Feedback Service
 - **AudioFeedbackServiceProtocol**: 音声フィードバック機能の抽象化
-- **AudioFeedbackService**: ずんだもん音声フィードバックの実装
+- **AudioFeedbackService**: 音声フィードバックの実装（ずんだもん/四国めたん対応）
   - **AVAudioPlayerベース**: キュー管理方式の音声再生
   - **レップカウント**: `playRepCount(_ count: Int)` - 1〜40回のカウント音声
   - **タイマーアラート**: `playTimerAlert(_ secondsRemaining: Int)` - 5/10/30秒警告、完了通知
-  - **フォームエラー**: `playFormError(_ errorType: FormErrorType)` - 肘開きエラー等の警告
-  - **速度フィードバック**: `playSpeedFeedback(_ speedType: SpeedType)` - 早すぎる/遅すぎる警告
+  - **フォームエラー**: `playElbowError()`, `playElbowFlareError()` - 肘開きエラー等の警告
+  - **速度フィードバック**: `playTooFast()`, `playTooSlow()` - 早すぎる/遅すぎる警告
+  - **ボイス切り替え**: `setVoice(_ voiceName: String)` - ずんだもん/四国めたん切り替え（✅ 実装済み）
   - **キュー式再生**: 複数音声の順次再生管理（AVAudioPlayerDelegate）
-  - **リソース管理**: Bundle内のWAVファイルへのアクセス管理
+  - **リソース管理**: Bundle内のWAVファイルへのアクセス管理（動的パス解決）
 
 ### Data Models
 - **Swift Structs/Classes**: データモデルの定義

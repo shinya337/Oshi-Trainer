@@ -14,13 +14,8 @@ struct TransparentImageView: UIViewRepresentable {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.isUserInteractionEnabled = true
 
-        // 画像を読み込み（失敗時はフォールバック）
-        if let image = UIImage(named: imageName) {
-            imageView.image = image
-        } else {
-            print("Warning: Failed to load image '\(imageName)', using fallback")
-            imageView.image = UIImage(systemName: "person.fill")
-        }
+        // 画像を読み込み（Assetsまたはファイルシステム）
+        imageView.image = loadImage(named: imageName)
 
         // タップジェスチャーを追加
         let tapGesture = UITapGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.handleTap))
@@ -41,10 +36,27 @@ struct TransparentImageView: UIViewRepresentable {
 
     func updateUIView(_ uiView: UIView, context: Context) {
         // 画像名が変更された場合に画像を更新
-        if let imageView = uiView.subviews.first as? AlphaHitTestImageView,
-           let image = UIImage(named: imageName) {
-            imageView.image = image
+        if let imageView = uiView.subviews.first as? AlphaHitTestImageView {
+            imageView.image = loadImage(named: imageName)
         }
+    }
+
+    /// 画像を読み込む（Assetsまたはファイルシステム）
+    private func loadImage(named imageName: String) -> UIImage {
+        // まずAssetsから読み込みを試みる
+        if let image = UIImage(named: imageName) {
+            return image
+        }
+
+        // Assetsにない場合、ファイルシステムから読み込む（UUID.png形式）
+        if let imagePersistence = try? ImagePersistenceService(),
+           let image = imagePersistence.loadImage(fileName: imageName) {
+            return image
+        }
+
+        // どちらも失敗した場合、フォールバック画像を返す
+        print("⚠️ 画像が見つかりません: '\(imageName)', フォールバック画像を使用")
+        return UIImage(systemName: "person.fill") ?? UIImage()
     }
 
     func makeCoordinator() -> Coordinator {

@@ -59,7 +59,7 @@ class HomeViewModel: ObservableObject {
 
     // MARK: - Initialization
 
-    init(dataService: DataServiceProtocol = MockDataService.shared) {
+    init(dataService: DataServiceProtocol = UserDefaultsDataService()) {
         self.dataService = dataService
         loadTrainers()
     }
@@ -67,10 +67,27 @@ class HomeViewModel: ObservableObject {
     // MARK: - Public Methods
 
     /// 推しトレーナーリストの読み込み
-    func loadTrainers() {
-        // デフォルトトレーナー「推乃 愛」
-        let defaultTrainer = dataService.getOshiTrainer()
-        let defaultTemplate = DefaultOshiTrainerData.oshiAiTemplate
+    /// - Parameter selectTrainerId: 読み込み後に選択するトレーナーのID（オプション）
+    func loadTrainers(selectTrainerId: UUID? = nil) {
+        // データサービスから全トレーナーテンプレートを取得
+        let allTemplates = dataService.getAllTrainerTemplates()
+
+        // OshiTrainerに変換
+        var trainerList: [OshiTrainer] = []
+        var templateList: [OshiTrainerTemplate] = []
+
+        for template in allTemplates {
+            let trainer = OshiTrainer(
+                id: template.id,
+                name: template.name,
+                level: 1,
+                experience: 0,
+                imageName: template.characterImage,
+                currentDialogue: DialogueTemplateProvider.getDialogue(for: .greeting)
+            )
+            trainerList.append(trainer)
+            templateList.append(template)
+        }
 
         // 推し追加プレースホルダー
         let addPlaceholder = OshiTrainer(
@@ -93,15 +110,26 @@ class HomeViewModel: ObservableObject {
             characterVoice: ""
         )
 
+        trainerList.append(addPlaceholder)
+        templateList.append(addPlaceholderTemplate)
+
         // 無限ループ用に配列を3倍にする（左グループ、中央グループ、右グループ）
-        let baseTrainers = [defaultTrainer, addPlaceholder]
-        let baseTemplates = [defaultTemplate, addPlaceholderTemplate]
+        let baseTrainers = trainerList
+        let baseTemplates = templateList
 
         trainers = baseTrainers + baseTrainers + baseTrainers
         templates = baseTemplates + baseTemplates + baseTemplates
 
-        // 中央グループから開始（インデックス = baseTrainers.count）
-        currentTrainerIndex = baseTrainers.count
+        // 指定されたトレーナーIDがあれば、そのトレーナーを選択
+        if let trainerId = selectTrainerId,
+           let index = baseTrainers.firstIndex(where: { $0.id == trainerId }) {
+            // 中央グループの該当インデックスを設定
+            currentTrainerIndex = baseTrainers.count + index
+        } else {
+            // デフォルトは中央グループから開始（インデックス = baseTrainers.count）
+            currentTrainerIndex = baseTrainers.count
+        }
+
         currentDialogue = DialogueTemplateProvider.getDialogue(for: .greeting)
     }
 
