@@ -13,12 +13,20 @@ Oshi-Trainer/
 │   ├── convert_models.py        # YOLOモデルのCore ML変換ユーティリティ
 │   ├── yolo11n-pose.pt          # YOLOv11 Poseモデルファイル（6.2MB）
 │   └── .venv/                   # Python仮想環境
-├── audio/                        # 🎵 音声アセット
-│   └── ずんだもん/               # ずんだもん音声ファイル（48ファイル）
+├── audio/                        # 🎵 音声アセット（96ファイル）
+│   ├── ずんだもん/               # ずんだもん音声ファイル（48ファイル）
+│   │   ├── rep_count/           # レップカウント音声（1〜40）
+│   │   ├── timer/               # タイマー音声（開始、残り時間、完了）
+│   │   ├── form_error/          # フォームエラー音声
+│   │   └── speed/               # 速度フィードバック音声
+│   └── 四国めたん/               # 四国めたん音声ファイル（48ファイル）
 │       ├── rep_count/           # レップカウント音声（1〜40）
 │       ├── timer/               # タイマー音声（開始、残り時間、完了）
 │       ├── form_error/          # フォームエラー音声
 │       └── speed/               # 速度フィードバック音声
+├── image/                        # 🖼️ 画像アセット（ソースファイル）
+│   ├── Oshino-Ai_normal.png     # デフォルト推しトレーナー「推乃 愛」の画像
+│   └── oshi_create.png          # 推し作成ボタン画像
 ├── .kiro/                        # Kiro仕様駆動開発関連
 │   ├── steering/                # ステアリングドキュメント
 │   └── specs/                   # 機能仕様書
@@ -63,6 +71,18 @@ ios/Oshi-Trainer/Oshi-Trainer/
 Oshi-Trainer/
 ├── Oshi_TrainerApp.swift                  # ✅ アプリケーションエントリーポイント
 ├── ContentView.swift                       # （初期テンプレート、未使用）
+├── Resources/                              # ✅ リソースファイル
+│   └── Audio/                             # ✅ iOS統合済み音声アセット（96ファイル）
+│       ├── ずんだもん/                    # ずんだもん音声（48ファイル）
+│       │   ├── rep_count/                # レップカウント（40ファイル）
+│       │   ├── timer/                    # タイマー（5ファイル）
+│       │   ├── form_error/               # フォームエラー（1ファイル）
+│       │   └── speed/                    # 速度フィードバック（2ファイル）
+│       └── 四国めたん/                    # 四国めたん音声（48ファイル）
+│           ├── rep_count/                # レップカウント（40ファイル）
+│           ├── timer/                    # タイマー（5ファイル）
+│           ├── form_error/               # フォームエラー（1ファイル）
+│           └── speed/                    # 速度フィードバック（2ファイル）
 ├── Features/                               # ✅ 機能別モジュール（実装済み）
 │   ├── Home/                              # ✅ ホーム画面（ウマ娘風UI）
 │   │   ├── Views/
@@ -185,33 +205,56 @@ import Services
 
 ## Audio Assets Structure
 
-### Zundamon Voice System
+### Voice System (96 Audio Files)
 
+#### ずんだもん音声システム（48ファイル）
 ```
-audio/
-└── ずんだもん/                 # ずんだもん音声アセット（48ファイル）
-    ├── rep_count/             # レップカウント音声（40ファイル）
-    │   ├── zunda_rep_1.wav   # 「1回なのだ！」
-    │   ├── zunda_rep_2.wav   # 「2回なのだ！」
-    │   └── ... (zunda_rep_40.wavまで)
-    ├── timer/                 # タイマー音声（5ファイル）
-    │   ├── zunda_start.wav    # トレーニング開始音声
-    │   ├── zunda_5_seconds.wav   # 残り5秒警告
-    │   ├── zunda_10_seconds.wav  # 残り10秒警告
-    │   ├── zunda_30_seconds.wav  # 残り30秒通知
-    │   └── zunda_complete.wav    # トレーニング完了音声
-    ├── form_error/            # フォームエラー音声（1ファイル）
-    │   └── zunda_elbow-error.wav  # 肘開きエラー警告
-    └── speed/                 # 速度フィードバック音声（2ファイル）
-        ├── zunda_too-fast.wav     # 速すぎる警告
-        └── zunda_too-slow.wav     # 遅すぎる警告
+audio/ずんだもん/
+├── rep_count/             # レップカウント音声（40ファイル）
+│   ├── zunda_rep_1.wav   # 「1回なのだ！」
+│   ├── zunda_rep_2.wav   # 「2回なのだ！」
+│   └── ... (zunda_rep_40.wavまで)
+├── timer/                 # タイマー音声（5ファイル）
+│   ├── zunda_start.wav    # トレーニング開始音声
+│   ├── zunda_5_seconds.wav   # 残り5秒警告
+│   ├── zunda_10_seconds.wav  # 残り10秒警告
+│   ├── zunda_30_seconds.wav  # 残り30秒通知
+│   └── zunda_complete.wav    # トレーニング完了音声
+├── form_error/            # フォームエラー音声（1ファイル）
+│   └── zunda_elbow-error.wav  # 肘開きエラー警告
+└── speed/                 # 速度フィードバック音声（2ファイル）
+    ├── zunda_too-fast.wav     # 速すぎる警告
+    └── zunda_too-slow.wav     # 遅すぎる警告
+```
+
+#### 四国めたん音声システム（48ファイル）
+```
+audio/四国めたん/
+├── rep_count/             # レップカウント音声（40ファイル）
+│   ├── shikoku_rep_1.wav
+│   ├── shikoku_rep_2.wav
+│   └── ... (shikoku_rep_40.wavまで)
+├── timer/                 # タイマー音声（5ファイル）
+│   ├── shikoku_start.wav
+│   ├── shikoku_5_seconds.wav
+│   ├── shikoku_10_seconds.wav
+│   ├── shikoku_30_seconds.wav
+│   └── shikoku_complete.wav
+├── form_error/            # フォームエラー音声（1ファイル）
+│   └── shikoku_elbow-error.wav
+└── speed/                 # 速度フィードバック音声（2ファイル）
+    ├── shikoku_too-fast.wav
+    └── shikoku_too-slow.wav
 ```
 
 ### Audio Integration Strategy
-- **iOS統合**: `AVAudioPlayer`または`AVFoundation`で再生
-- **Bundle Management**: Xcodeビルド時に`Assets.xcassets`またはBundleリソースとして含める
-- **File Naming Convention**: `zunda_[category]_[identifier].wav`
+- **iOS統合**: `Resources/Audio/`配下に配置、`AVAudioPlayer`で再生
+- **Bundle Management**: Xcodeビルド時にBundleリソースとして含める
+- **File Naming Convention**:
+  - ずんだもん: `zunda_[category]_[identifier].wav`
+  - 四国めたん: `shikoku_[category]_[identifier].wav`
 - **Playback Queue**: 複数音声の順次再生管理
+- **Voice Selection**: トレーナーキャラクターに応じた音声選択機能
 
 ## Python Prototype Structure
 

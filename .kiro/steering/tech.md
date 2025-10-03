@@ -120,14 +120,25 @@
   - `TrainingSession`: トレーニングセッション記録モデル
 
 ### Audio Assets
-- **Zundamon Voice System**: ずんだもん音声アセット（48ファイル）
+- **Voice System**: 96音声ファイル（2キャラクター対応）
+
+  **ずんだもん音声システム**（48ファイル）:
   - **Rep Count Audio**: レップカウント音声（`zunda_rep_1.wav`〜`zunda_rep_40.wav`、40ファイル）
   - **Timer Audio**: タイマー音声（`zunda_start.wav`, `zunda_5_seconds.wav`, `zunda_10_seconds.wav`, `zunda_30_seconds.wav`, `zunda_complete.wav`、5ファイル）
   - **Form Error Audio**: フォームエラー音声（`zunda_elbow-error.wav`、1ファイル）
   - **Speed Audio**: 速度フィードバック音声（`zunda_too-fast.wav`, `zunda_too-slow.wav`、2ファイル）
+
+  **四国めたん音声システム**（48ファイル）:
+  - **Rep Count Audio**: レップカウント音声（`shikoku_rep_1.wav`〜`shikoku_rep_40.wav`、40ファイル）
+  - **Timer Audio**: タイマー音声（`shikoku_start.wav`, `shikoku_5_seconds.wav`, `shikoku_10_seconds.wav`, `shikoku_30_seconds.wav`, `shikoku_complete.wav`、5ファイル）
+  - **Form Error Audio**: フォームエラー音声（`shikoku_elbow-error.wav`、1ファイル）
+  - **Speed Audio**: 速度フィードバック音声（`shikoku_too-fast.wav`, `shikoku_too-slow.wav`、2ファイル）
+
   - **Format**: WAV形式（iOS上でAVFoundationで再生）
-  - **Location**: `audio/ずんだもん/` ディレクトリ（サブディレクトリ: `rep_count/`, `timer/`, `form_error/`, `speed/`）
-  - **Usage**: リアルタイムフォーム解析機能の音声フィードバック
+  - **Location**:
+    - ソースファイル: `audio/ずんだもん/`, `audio/四国めたん/`
+    - iOS統合: `Resources/Audio/ずんだもん/`, `Resources/Audio/四国めたん/`
+  - **Usage**: リアルタイムフォーム解析機能の音声フィードバック、キャラクター別音声選択
 
 ## Development Environment
 
