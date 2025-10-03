@@ -41,7 +41,7 @@ struct TrainerDetailView: View {
     // MARK: - Subviews
 
     private var characterIconView: some View {
-        Image(template.characterImage)
+        Image.loadFromAssetOrFile(template.characterImage)
             .resizable()
             .scaledToFill()
             .scaleEffect(template.detailIconScale)
@@ -60,12 +60,12 @@ struct TrainerDetailView: View {
             DetailRow(label: "名前", value: trainer.name)
             DetailRow(
                 label: "イメージカラー",
-                value: "ピンク",
+                value: getColorDisplayName(template.themeColor),
                 color: Color.oshiThemeColor(from: template.themeColor)
             )
             DetailRow(label: "一人称", value: template.firstPerson)
             DetailRow(label: "呼び方", value: template.secondPerson)
-            DetailRow(label: "性格", value: template.personalityDescription)
+            DetailRow(label: "性格", value: template.personalityType.displayName)
             DetailRow(label: "ボイス", value: template.characterVoice)
         }
         .padding(20)
@@ -80,7 +80,24 @@ struct TrainerDetailView: View {
         Button("閉じる") {
             dismiss()
         }
-        .buttonStyle(OshiButtonStyle())
+        .font(.system(size: 18, weight: .semibold, design: .rounded))
+        .foregroundColor(.white)
+        .padding()
+        .frame(maxWidth: .infinity)
+        .background(Color.oshiThemeColor(from: template.themeColor))
+        .cornerRadius(12)
+    }
+
+    /// 色の表示名を取得
+    private func getColorDisplayName(_ colorId: String) -> String {
+        switch colorId {
+        case "pink": return "ピンク"
+        case "blue": return "ブルー"
+        case "green": return "グリーン"
+        case "orange": return "オレンジ"
+        case "purple": return "パープル"
+        default: return "ピンク"
+        }
     }
 }
 

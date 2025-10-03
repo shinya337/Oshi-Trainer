@@ -5,6 +5,7 @@ struct HomeView: View {
     @State private var showLevelDetail = false
     @State private var showTrainingPopup = false
     @State private var showTrainerDetail = false
+    @State private var showTrainerCreation = false
 
     var body: some View {
         NavigationStack {
@@ -64,6 +65,25 @@ struct HomeView: View {
                     trainer: viewModel.currentTrainer,
                     template: viewModel.currentTemplate
                 )
+            }
+            .sheet(isPresented: $showTrainerCreation) {
+                NavigationStack {
+                    TrainerCreationView()
+                }
+            }
+            .onChange(of: showTrainerCreation) { _, isPresented in
+                if !isPresented {
+                    // 作成画面を閉じた後、トレーナーリストを再読み込み
+                    // 新しく作成されたトレーナーがあればそれを選択
+                    if let lastCreatedIdString = UserDefaults.standard.string(forKey: "lastCreatedTrainerId"),
+                       let lastCreatedId = UUID(uuidString: lastCreatedIdString) {
+                        viewModel.loadTrainers(selectTrainerId: lastCreatedId)
+                        // 一時保存データをクリア
+                        UserDefaults.standard.removeObject(forKey: "lastCreatedTrainerId")
+                    } else {
+                        viewModel.loadTrainers()
+                    }
+                }
             }
         }
     }
@@ -160,8 +180,7 @@ struct HomeView: View {
                         .frame(height: geometry.size.height * 0.75)
                         .scaleEffect(viewModel.currentTemplate.homeImageScale)
                         .onTapGesture {
-                            // 推し追加ビューへ遷移（今後実装）
-                            print("推し追加画面へ遷移")
+                            showTrainerCreation = true
                         }
                 } else {
                     // 通常のトレーナー画像
@@ -188,8 +207,7 @@ struct HomeView: View {
             if viewModel.isAddPlaceholder(viewModel.currentTrainer) {
                 // 推し追加プレースホルダー用ボタン（メッセージ枠なし）
                 Button("推しトレーナー作成") {
-                    // 推し追加ビューへ遷移（今後実装）
-                    print("推し追加画面へ遷移")
+                    showTrainerCreation = true
                 }
                 .font(.system(size: 24, weight: .bold, design: .rounded))
                 .foregroundColor(.white)

@@ -1,25 +1,22 @@
 import Foundation
 
-class MockDataService: DataServiceProtocol {
-    static let shared = MockDataService()
-
+/// UserDefaultsを使用したデータ永続化サービス
+class UserDefaultsDataService: DataServiceProtocol {
     // MARK: - Properties
 
-    /// メモリ内トレーナーテンプレート管理
-    private var trainerTemplates: [OshiTrainerTemplate] = []
+    private let trainerTemplatesKey = "trainerTemplates"
 
-    private init() {
-        // デフォルトトレーナー「推乃 愛」をテンプレートリストに追加
-        trainerTemplates.append(DefaultOshiTrainerData.oshiAiTemplate)
-    }
+    // MARK: - DataServiceProtocol (既存メソッド)
 
     func getOshiTrainer() -> OshiTrainer {
+        // デフォルトトレーナーを返す（後方互換性）
         var trainer = DefaultOshiTrainerData.oshiAi
         trainer.currentDialogue = DialogueTemplateProvider.getDialogue(for: .greeting)
         return trainer
     }
 
     func getLevelData() -> (level: Int, experience: Int, achievements: [Achievement]) {
+        // モックデータを返す（後方互換性）
         let achievements = [
             Achievement(
                 title: "初めての一歩",
@@ -41,23 +38,8 @@ class MockDataService: DataServiceProtocol {
                 iconName: "trophy.fill",
                 isUnlocked: true,
                 unlockedDate: Date().addingTimeInterval(-86400 * 2)
-            ),
-            Achievement(
-                title: "鉄人への道",
-                description: "300回のトレーニングを完了しました",
-                iconName: "medal.fill",
-                isUnlocked: false,
-                unlockedDate: nil
-            ),
-            Achievement(
-                title: "レジェンド",
-                description: "1000回のトレーニングを完了しました",
-                iconName: "crown.fill",
-                isUnlocked: false,
-                unlockedDate: nil
             )
         ]
-
         return (level: 10, experience: 2450, achievements: achievements)
     }
 
@@ -117,20 +99,50 @@ class MockDataService: DataServiceProtocol {
     // MARK: - トレーナーテンプレート管理
 
     func getAllTrainerTemplates() -> [OshiTrainerTemplate] {
-        return trainerTemplates
+        // UserDefaultsからデータを取得
+        guard let data = UserDefaults.standard.data(forKey: trainerTemplatesKey) else {
+            // データが存在しない場合はデフォルトトレーナーのみを返す
+            return [DefaultOshiTrainerData.oshiAiTemplate]
+        }
+
+        // JSONデコード
+        let decoder = JSONDecoder()
+        do {
+            let templates = try decoder.decode([OshiTrainerTemplate].self, from: data)
+            return templates
+        } catch {
+            print("❌ トレーナーテンプレートのデコードエラー: \(error)")
+            // デコード失敗時はデフォルトトレーナーのみを返す
+            return [DefaultOshiTrainerData.oshiAiTemplate]
+        }
     }
 
     func saveTrainerTemplate(_ template: OshiTrainerTemplate) -> Result<Void, DataServiceError> {
+        // 既存のテンプレートを取得
+        var templates = getAllTrainerTemplates()
+
         // 既存のテンプレートと同じIDがあれば更新、なければ追加
-        if let index = trainerTemplates.firstIndex(where: { $0.id == template.id }) {
-            trainerTemplates[index] = template
+        if let index = templates.firstIndex(where: { $0.id == template.id }) {
+            templates[index] = template
         } else {
-            trainerTemplates.append(template)
+            templates.append(template)
         }
-        return .success(())
+
+        // JSONエンコード
+        let encoder = JSONEncoder()
+        do {
+            let data = try encoder.encode(templates)
+            UserDefaults.standard.set(data, forKey: trainerTemplatesKey)
+            print("✅ トレーナーテンプレートを保存しました: \(template.name)")
+            return .success(())
+        } catch {
+            print("❌ トレーナーテンプレートのエンコードエラー: \(error)")
+            return .failure(.encodingFailed)
+        }
     }
 
     func getTrainerTemplate(by id: UUID) -> OshiTrainerTemplate? {
-        return trainerTemplates.first(where: { $0.id == id })
+        let templates = getAllTrainerTemplates()
+        return templates.first(where: { $0.id == id })
     }
 }
