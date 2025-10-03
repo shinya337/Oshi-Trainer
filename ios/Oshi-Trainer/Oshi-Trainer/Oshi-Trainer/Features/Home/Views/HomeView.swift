@@ -30,7 +30,7 @@ struct HomeView: View {
 
                 // TabView でスワイプ切り替え可能なキャラクター画像
                 TabView(selection: $viewModel.currentTrainerIndex) {
-                    ForEach(Array(viewModel.trainers.enumerated()), id: \.element.id) { index, trainer in
+                    ForEach(Array(viewModel.trainers.enumerated()), id: \.offset) { index, trainer in
                         characterImageLayer(for: trainer)
                             .tag(index)
                     }
@@ -38,6 +38,9 @@ struct HomeView: View {
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .frame(maxHeight: .infinity)
                 .zIndex(0)
+                .onChange(of: viewModel.currentTrainerIndex) { oldValue, newValue in
+                    handleInfiniteLoop(newValue: newValue)
+                }
 
                 // セリフ欄
                 VStack(spacing: 0) {
@@ -60,6 +63,29 @@ struct HomeView: View {
                     trainer: viewModel.currentTrainer,
                     template: viewModel.currentTemplate
                 )
+            }
+        }
+    }
+
+    // MARK: - Infinite Loop Handler
+
+    /// 無限ループ処理：端に到達したら中央グループに戻す
+    private func handleInfiniteLoop(newValue: Int) {
+        let actualCount = viewModel.actualTrainerCount
+
+        // アニメーション完了を待ってからリセット（TabViewのデフォルトアニメーションは約0.3秒）
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+            // 左端のグループに到達した場合、中央グループの同じ位置に移動
+            if viewModel.currentTrainerIndex < actualCount {
+                withAnimation(.none) {
+                    viewModel.currentTrainerIndex += actualCount
+                }
+            }
+            // 右端のグループに到達した場合、中央グループの同じ位置に移動
+            else if viewModel.currentTrainerIndex >= actualCount * 2 {
+                withAnimation(.none) {
+                    viewModel.currentTrainerIndex -= actualCount
+                }
             }
         }
     }

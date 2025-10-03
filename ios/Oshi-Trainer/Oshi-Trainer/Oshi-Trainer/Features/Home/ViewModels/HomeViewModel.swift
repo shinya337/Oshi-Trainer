@@ -18,14 +18,21 @@ class HomeViewModel: ObservableObject {
 
     // MARK: - Computed Properties
 
+    /// 実際のトレーナー数（無限ループ用配列の1グループ分）
+    var actualTrainerCount: Int {
+        return trainers.count / 3
+    }
+
     /// 現在選択中のトレーナー
     var currentTrainer: OshiTrainer {
-        trainers.indices.contains(currentTrainerIndex) ? trainers[currentTrainerIndex] : trainers[0]
+        let actualIndex = currentTrainerIndex % actualTrainerCount
+        return trainers.indices.contains(actualIndex) ? trainers[actualIndex] : trainers[0]
     }
 
     /// 現在選択中のトレーナーテンプレート
     var currentTemplate: OshiTrainerTemplate {
-        templates.indices.contains(currentTrainerIndex) ? templates[currentTrainerIndex] : templates[0]
+        let actualIndex = currentTrainerIndex % actualTrainerCount
+        return templates.indices.contains(actualIndex) ? templates[actualIndex] : templates[0]
     }
 
     /// 現在のレベル（後方互換性のため）
@@ -86,8 +93,15 @@ class HomeViewModel: ObservableObject {
             characterVoice: ""
         )
 
-        trainers = [defaultTrainer, addPlaceholder]
-        templates = [defaultTemplate, addPlaceholderTemplate]
+        // 無限ループ用に配列を3倍にする（左グループ、中央グループ、右グループ）
+        let baseTrainers = [defaultTrainer, addPlaceholder]
+        let baseTemplates = [defaultTemplate, addPlaceholderTemplate]
+
+        trainers = baseTrainers + baseTrainers + baseTrainers
+        templates = baseTemplates + baseTemplates + baseTemplates
+
+        // 中央グループから開始（インデックス = baseTrainers.count）
+        currentTrainerIndex = baseTrainers.count
         currentDialogue = DialogueTemplateProvider.getDialogue(for: .greeting)
     }
 
