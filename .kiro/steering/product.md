@@ -97,11 +97,12 @@ Oshi-Trainerは、ユーザーが「推し」（お気に入りのアイドル�
 
 #### ✅ 実装済み機能
 - **ホーム画面（ウマ娘風UI）**:
-  - 推しキャラクターの表示
+  - 推しキャラクターの表示（背景透過PNG、無限ループアニメーション対応）
   - 推しレベルとEXP表示
-  - セリフ表示機能
+  - セリフ表示機能（吹き出し付き）
   - ナビゲーションボタン（統計、設定）
-  - 推し作成ボタン
+  - 推し作成ボタン（カスタム画像アセット: `oshi_create.png`）
+  - キャラクタータップによる詳細画面表示
 
 - **デフォルト推しトレーナー「推乃 愛（オシノ アイ）」**:
   - ツンデレ性格のデフォルトトレーナー
@@ -109,6 +110,11 @@ Oshi-Trainerは、ユーザーが「推し」（お気に入りのアイドル�
   - テンプレートセリフシステム（挨拶、トレーニング開始、応援、照れ隠し）
   - キャラクター画像の背景透過とアルファヒットテスト
   - ホーム画面への統合表示
+
+- **トレーナー詳細画面**:
+  - トレーナーの詳細情報表示（名前、イメージカラー、一人称、呼び方、性格、ボイス）
+  - キャラクターアイコン表示（円形クリッピング、テーマカラーボーダー）
+  - カスタムスケール・オフセット対応（`detailIconScale`, `detailIconOffsetY`）
 
 - **レベル詳細画面**:
   - レベルとEXPの詳細表示
@@ -127,7 +133,7 @@ Oshi-Trainerは、ユーザーが「推し」（お気に入りのアイドル�
 - **データモデルとサービス層**:
   - `OshiTrainer`, `Achievement`, `Statistics`, `TrainingSession`モデル
   - `DefaultOshiTrainerData`: デフォルトトレーナーのデータ定義
-  - `OshiTrainerTemplate`: 推しトレーナーテンプレートモデル
+  - `OshiTrainerTemplate`: 推しトレーナーテンプレートモデル（詳細画面表示用パラメータ含む: `detailIconScale`, `detailIconOffsetY`）
   - `PersonalityType`, `EncouragementStyle`, `FeedbackFrequency`: 性格・トレーニングパラメータモデル
   - プロトコル指向の`DataServiceProtocol`
   - 開発用`MockDataService`

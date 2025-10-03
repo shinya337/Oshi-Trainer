@@ -66,9 +66,10 @@ Oshi-Trainer/
 ├── Features/                               # ✅ 機能別モジュール（実装済み）
 │   ├── Home/                              # ✅ ホーム画面（ウマ娘風UI）
 │   │   ├── Views/
-│   │   │   └── HomeView.swift            # ✅ メインホーム画面
+│   │   │   ├── HomeView.swift            # ✅ メインホーム画面
+│   │   │   └── TrainerDetailView.swift  # ✅ トレーナー詳細画面
 │   │   └── ViewModels/
-│   │       └── HomeViewModel.swift       # ✅ ホーム画面ロジック
+│   │       └── HomeViewModel.swift       # ✅ ホーム画面ロジック（無限ループ対応）
 │   ├── LevelDetail/                       # ✅ レベル詳細画面
 │   │   ├── Views/
 │   │   │   └── LevelDetailView.swift    # ✅ レベル・実績詳細表示
@@ -120,6 +121,7 @@ Oshi-Trainer/
     ├── AppIcon.appiconset/                # アプリアイコン
     ├── AccentColor.colorset/              # アクセントカラー
     ├── Oshino-Ai.imageset/                # ✅ デフォルト推しトレーナー画像
+    ├── oshi_create.imageset/              # ✅ 推し作成ボタン画像
     └── Contents.json                      # アセットメタデータ
 ```
 
