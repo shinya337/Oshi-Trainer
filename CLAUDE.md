@@ -18,6 +18,7 @@ Kiro-style Spec Driven Development implementation using claude code slash comman
 - **oshi-trainer-frontend-ui**: 推しトレーナーアプリのフロントエンドUI（ウマ娘風ホーム画面）
 - **default-oshi-trainer**: デフォルト推しトレーナー「推乃 愛（オシノ アイ）」の作成とホーム画面への表示
 - **oshi-trainer-template**: 推しトレーナーのテンプレート化（推し作成機能の基盤となる入力項目の整理）
+- **home-screen-ui-improvements**: ホーム画面UIの改善（キャラ詳細画面、スワイプ切り替え、操作性向上）
 - Check `.kiro/specs/` for active specifications
 - Use `/kiro:spec-status [feature-name]` to check progress
 
