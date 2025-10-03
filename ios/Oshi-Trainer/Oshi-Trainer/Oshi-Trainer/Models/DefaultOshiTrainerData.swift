@@ -17,12 +17,15 @@ struct DefaultOshiTrainerData {
         name: "推乃 愛",
         themeColor: "pink",
         characterImage: "Oshino-Ai",
-        personalityType: .cheerful,
-        firstPerson: "私",
-        secondPerson: "あなた",
-        personalityDescription: "明るく元気な性格で、いつもポジティブに応援してくれます",
-        characterVoice: "ずんだもん",
+        personalityType: .tsundere,
+        firstPerson: "うち",
+        secondPerson: "あんた",
+        personalityDescription: "ツンデレ",
+        characterVoice: "VOICEVOX:ずんだもん",
         encouragementStyle: .balanced,
-        feedbackFrequency: .medium
+        feedbackFrequency: .medium,
+        homeImageScale: 2.0,
+        detailIconScale: 2.2,
+        detailIconOffsetY: 60
     )
 }
