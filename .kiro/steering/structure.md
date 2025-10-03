@@ -32,7 +32,9 @@ Oshi-Trainer/
 │   └── specs/                   # 機能仕様書
 │       ├── oshi-trainer-frontend-ui/      # ホーム画面UI仕様
 │       ├── default-oshi-trainer/          # デフォルトトレーナー仕様
-│       └── oshi-trainer-template/         # 推しトレーナーテンプレート仕様
+│       ├── oshi-trainer-template/         # 推しトレーナーテンプレート仕様
+│       ├── home-screen-ui-improvements/   # ホーム画面UI改善仕様
+│       └── trainer-creation-feature/      # 推しトレーナー作成機能仕様（✅ 完了）
 ├── .claude/                      # Claude Code設定
 │   └── commands/                # カスタムスラッシュコマンド
 ├── README.md                     # プロジェクト概要
@@ -100,9 +102,12 @@ Oshi-Trainer/
 │   │   │   └── StatisticsView.swift     # ✅ 統計表示画面
 │   │   └── ViewModels/
 │   │       └── StatisticsViewModel.swift # ✅ 統計計算ロジック
-│   ├── TrainerCreation/                   # ✅ 推しトレーナー作成
-│   │   └── Views/
-│   │       └── TrainerCreationView.swift # ✅ トレーナー作成画面
+│   ├── TrainerCreation/                   # ✅ 推しトレーナー作成（完全実装済み）
+│   │   ├── Views/
+│   │   │   ├── TrainerCreationView.swift # ✅ トレーナー作成画面（フォーム、バリデーション）
+│   │   │   └── ImagePicker.swift        # ✅ PHPickerViewController SwiftUIラッパー
+│   │   └── ViewModels/
+│   │       └── TrainerCreationViewModel.swift # ✅ トレーナー作成ロジック
 │   ├── Training/                          # ✅ トレーニング機能（UI部分）
 │   │   └── Views/
 │   │       ├── CameraView.swift          # ✅ カメラビュー
@@ -123,20 +128,23 @@ Oshi-Trainer/
 ├── Services/                               # ✅ サービス層（実装済み）
 │   ├── DataServiceProtocol.swift          # ✅ データアクセスプロトコル
 │   ├── MockDataService.swift              # ✅ 開発用モックサービス
+│   ├── UserDefaultsDataService.swift      # ✅ UserDefaultsベースのデータ永続化
+│   ├── ImagePersistenceService.swift      # ✅ 画像ファイル保存・読み込みサービス
 │   ├── DialogueTemplateProvider.swift     # ✅ テンプレートセリフ提供サービス
 │   └── Audio/                             # ✅ 音声フィードバックサービス
 │       ├── AudioFeedbackServiceProtocol.swift  # ✅ 音声フィードバックプロトコル
-│       └── AudioFeedbackService.swift     # ✅ AVAudioPlayerベースの音声再生実装
+│       └── AudioFeedbackService.swift     # ✅ AVAudioPlayerベースの音声再生実装（ボイス切り替え対応）
 ├── Shared/                                 # ✅ 共有コンポーネント（実装済み）
 │   ├── Extensions/
-│   │   └── Color+Oshi.swift              # ✅ ウマ娘風カラーパレット
+│   │   ├── Color+Oshi.swift              # ✅ ウマ娘風カラーパレット
+│   │   └── Image+LoadFromFile.swift      # ✅ Assets/ファイルシステム画像読み込み拡張
 │   ├── Styles/
 │   │   ├── OshiButtonStyle.swift         # ✅ カスタムボタンスタイル
 │   │   └── OshiTextStyles.swift          # ✅ カスタムテキストスタイル
 │   ├── Utilities/
 │   │   └── AlphaHitTestImageView.swift   # ✅ アルファ値ベースのタップ判定
 │   └── Views/
-│       └── TransparentImageView.swift    # ✅ 背景透過画像表示ビュー
+│       └── TransparentImageView.swift    # ✅ 背景透過画像表示（Assets + ファイルシステム対応）
 └── Assets.xcassets/                       # ✅ アセットカタログ
     ├── AppIcon.appiconset/                # アプリアイコン
     ├── AccentColor.colorset/              # アクセントカラー

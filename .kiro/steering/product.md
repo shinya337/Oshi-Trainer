@@ -43,10 +43,18 @@ Oshi-Trainerは、ユーザーが「推し」（お気に入りのアイドル�
   - `FeedbackFrequency`: フィードバック頻度（最小限、適度、頻繁、常時）
   - 将来の推し作成機能の基盤を提供
 
-- **推しトレーナー作成**（Future Feature）:
+- **推しトレーナー作成**（✅ 実装済み）:
   - ユーザーは自分の好みの顔、性格、声のトレーナーを作成可能
   - テンプレートシステムに基づいたパラメータ入力
-  - LLM（大規模言語モデル）を活用し、性格に応じた多様なセリフでユーザーを鼓舞
+    - 名前、キャラクター画像（写真ライブラリから選択）
+    - イメージカラー（5色：ピンク、ブルー、グリーン、オレンジ、パープル）
+    - 一人称・二人称のカスタマイズ
+    - 性格タイプ（優しい、元気、クール、ツンデレ、厳しい）
+    - ボイス選択（ずんだもん、四国めたん）
+  - データ永続化（UserDefaults + ファイルシステム）
+  - 複数トレーナーの管理とスワイプ切り替え
+  - 作成したトレーナーのホーム画面表示
+  - 将来的なLLM統合の基盤を提供
 
 ### 【機能2】統計システム（Future Feature）
 - **統計**: トレーニングの統計を表示する機能
@@ -126,7 +134,14 @@ Oshi-Trainerは、ユーザーが「推し」（お気に入りのアイドル�
 
 - **設定画面**: 基本的な設定画面UI
 
-- **推しトレーナー作成画面**: 作成画面への導線
+- **推しトレーナー作成画面**（✅ 完全実装済み）:
+  - PhotosUI統合による画像選択（PHPickerViewController）
+  - フォームバリデーション（名前必須、画像必須、30文字制限）
+  - リアルタイムプレビュー表示
+  - ボイスサンプル再生機能
+  - キーボード外タップでの入力解除
+  - エラーメッセージ表示
+  - トレーナー作成成功時の自動選択表示
 
 - **トレーニングポップアップ**: トレーニング開始のためのUI
 
@@ -137,15 +152,19 @@ Oshi-Trainerは、ユーザーが「推し」（お気に入りのアイドル�
   - `PersonalityType`, `EncouragementStyle`, `FeedbackFrequency`: 性格・トレーニングパラメータモデル
   - プロトコル指向の`DataServiceProtocol`
   - 開発用`MockDataService`
+  - `UserDefaultsDataService`: UserDefaultsベースのデータ永続化サービス（✅ 実装済み）
+  - `ImagePersistenceService`: 画像ファイル保存・読み込みサービス（Documents/TrainerImages/）（✅ 実装済み）
   - `DialogueTemplateProvider`: テンプレートセリフ提供サービス
-  - `AudioFeedbackService`: ずんだもん音声フィードバックサービス（AVAudioPlayerキュー式再生）
+  - `AudioFeedbackService`: 音声フィードバックサービス（AVAudioPlayerキュー式再生、ずんだもん/四国めたん対応）
 
 - **カスタムUIコンポーネント**:
   - ウマ娘風カラーパレット（`Color+Oshi`）
   - カスタムボタンスタイル（`OshiButtonStyle`）
   - カスタムテキストスタイル（`OshiTextStyles`）
-  - `TransparentImageView`: 背景透過画像表示
+  - `TransparentImageView`: 背景透過画像表示（Assets + ファイルシステム対応）
   - `AlphaHitTestImageView`: アルファ値ベースのタップ判定
+  - `ImagePicker`: PHPickerViewControllerのSwiftUIラッパー（iCloud画像対応）
+  - `Image+LoadFromFile`: AssetsとファイルシステムからのImage読み込み拡張
 
 #### 🧪 実験中のプロトタイプ
 - **Pythonベースの姿勢推定プロトタイプ**:
@@ -166,6 +185,7 @@ Oshi-Trainerは、ユーザーが「推し」（お気に入りのアイドル�
   - 注: 現在はスタンドアロンPythonスクリプト、iOS統合は今後の課題
 
 #### 🔄 次のフェーズ
+- **トレーナー削除機能**: 作成したトレーナーの削除
 - **リアルタイムフォーム解析機能**: Pythonプロトタイプベースの姿勢解析をiOSに統合（計画中）
 - **Core MLモデル変換**: YOLOモデルのCore ML形式への変換
 - **経験値とレベルアップシステム**: トレーニング完了時のEXP付与
