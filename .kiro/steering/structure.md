@@ -13,10 +13,6 @@ Oshi-Trainer/
 │   ├── convert_models.py        # YOLOモデルのCore ML変換ユーティリティ
 │   ├── yolo11n-pose.pt          # YOLOv11 Poseモデルファイル（6.2MB）
 │   └── .venv/                   # Python仮想環境
-├── 参考プログラム/                # 📚 リアルタイムフォーム解析の参考実装
-│   ├── CameraManager.swift      # カメラセッション管理の参考実装
-│   ├── MLModelManager.swift     # Core ML推論管理の参考実装
-│   └── ExerciseTrainingView.swift # トレーニング画面UIの参考実装
 ├── audio/                        # 🎵 音声アセット
 │   └── ずんだもん/               # ずんだもん音声ファイル（48ファイル）
 │       ├── rep_count/           # レップカウント音声（1〜40）
@@ -32,7 +28,8 @@ Oshi-Trainer/
 ├── .claude/                      # Claude Code設定
 │   └── commands/                # カスタムスラッシュコマンド
 ├── README.md                     # プロジェクト概要
-└── CLAUDE.md                     # Claude Code プロジェクト指示
+├── CLAUDE.md                     # Claude Code プロジェクト指示
+└── 企画書.md                     # プロジェクト企画書
 ```
 
 ## iOS Application Structure
@@ -213,56 +210,6 @@ audio/
 - **Bundle Management**: Xcodeビルド時に`Assets.xcassets`またはBundleリソースとして含める
 - **File Naming Convention**: `zunda_[category]_[identifier].wav`
 - **Playback Queue**: 複数音声の順次再生管理
-
-## Reference Programs Structure（参考プログラム）
-
-### Purpose and Usage
-リアルタイムフォーム解析機能の実装に向けた参考実装コード集
-
-### Directory Organization
-
-```
-参考プログラム/
-├── CameraManager.swift           # カメラセッション管理の参考実装
-├── MLModelManager.swift          # Core ML推論管理の参考実装
-└── ExerciseTrainingView.swift   # トレーニング画面UIの参考実装
-```
-
-### File Descriptions
-
-#### CameraManager.swift
-**Role**: AVFoundationベースのカメラセッション管理の実装例
-- カメラ権限の要求と状態管理（`AVAuthorizationStatus`）
-- フロント/バックカメラの切り替え（`AVCaptureDevice.Position`）
-- リアルタイムピクセルバッファ出力（`CVPixelBuffer`）
-- デリゲートパターンでのフレーム配信（`CameraOutputDelegate`）
-- リソースクリーンアップ管理（`ResourceCleanupCoordinator`）
-- セッション制御の安全な実装（DispatchQueue活用）
-
-**Integration Target**: `realtime-form-analysis`仕様の`CameraService.swift`
-
-#### MLModelManager.swift
-**Role**: Core MLモデル推論管理の実装例
-- Core MLモデルの非同期推論実行（async/await）
-- バッチ処理とパフォーマンス最適化
-- エラーハンドリングとフォールバック処理
-- リソース管理とメモリ効率化
-
-**Integration Target**: `realtime-form-analysis`仕様の`PoseEstimationService.swift`
-
-#### ExerciseTrainingView.swift
-**Role**: トレーニング画面UIの構成例
-- カメラプレビューとML推論結果のオーバーレイ表示
-- リアルタイムフィードバックUI
-- SwiftUI + UIViewRepresentable連携パターン
-- リアルタイムデータバインディング
-
-**Integration Target**: `realtime-form-analysis`仕様の`TrainingView.swift`
-
-### Development Workflow
-1. **参考実装の確認**: 各ファイルの実装パターンを理解
-2. **仕様への適用**: `realtime-form-analysis`仕様のタスク実装時に参考
-3. **段階的統合**: 参考実装をベースに、仕様に沿った実装を行う
 
 ## Python Prototype Structure
 
