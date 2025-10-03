@@ -18,16 +18,6 @@ struct HomeView: View {
                 themeGradientBackground
                     .zIndex(-0.5)
 
-                VStack(spacing: 0) {
-                    // ヘッダー
-                    headerView
-                        .padding(.horizontal)
-                        .padding(.top, 16)
-                        .zIndex(2)
-
-                    Spacer()
-                }
-
                 // TabView でスワイプ切り替え可能なキャラクター画像
                 TabView(selection: $viewModel.currentTrainerIndex) {
                     ForEach(Array(viewModel.trainers.enumerated()), id: \.offset) { index, trainer in
@@ -37,10 +27,21 @@ struct HomeView: View {
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .frame(maxHeight: .infinity)
+                .ignoresSafeArea(edges: .bottom)
                 .zIndex(0)
                 .onChange(of: viewModel.currentTrainerIndex) { oldValue, newValue in
                     handleInfiniteLoop(newValue: newValue)
                 }
+
+                // ヘッダー（前面に配置）
+                VStack(spacing: 0) {
+                    headerView
+                        .padding(.horizontal)
+                        .padding(.top, 16)
+
+                    Spacer()
+                }
+                .zIndex(2)
 
                 // セリフ欄
                 VStack(spacing: 0) {
@@ -156,8 +157,8 @@ struct HomeView: View {
                     Image("oshi_create")
                         .resizable()
                         .scaledToFit()
-                        .frame(height: geometry.size.height * 0.7)
-                        .scaleEffect(1.6)
+                        .frame(height: geometry.size.height * 0.75)
+                        .scaleEffect(viewModel.currentTemplate.homeImageScale)
                         .onTapGesture {
                             // 推し追加ビューへ遷移（今後実装）
                             print("推し追加画面へ遷移")
@@ -170,53 +171,66 @@ struct HomeView: View {
                             showTrainerDetail = true
                         }
                     )
-                    .frame(height: geometry.size.height * 0.7)
-                    .scaleEffect(1.6)
+                    .frame(height: geometry.size.height * 0.75)
+                    .scaleEffect(viewModel.currentTemplate.homeImageScale)
                 }
                 Spacer()
             }
-            .frame(width: geometry.size.width, height: geometry.size.height * 0.7)
-            .position(x: geometry.size.width / 2, y: geometry.size.height - (geometry.size.height * 0.7 / 2))
+            .frame(width: geometry.size.width, height: geometry.size.height * 0.75)
+            .position(x: geometry.size.width / 2, y: geometry.size.height - (geometry.size.height * 0.75 / 2))
         }
     }
 
     // MARK: - Dialogue Bubble
 
     private var dialogueBubble: some View {
-        VStack(spacing: 4) {
-            // キャラ名
-            Text(viewModel.currentTrainer.name)
-                .font(.system(size: 16, weight: .bold, design: .rounded))
-                .foregroundColor(.oshiTextSecondary)
-
+        Group {
             if viewModel.isAddPlaceholder(viewModel.currentTrainer) {
-                // 推し追加プレースホルダー用ボタン
-                Button("キャラを作成する") {
+                // 推し追加プレースホルダー用ボタン（メッセージ枠なし）
+                Button("推しトレーナー作成") {
                     // 推し追加ビューへ遷移（今後実装）
                     print("推し追加画面へ遷移")
                 }
-                .buttonStyle(OshiButtonStyle())
-                .padding(.top, 8)
+                .font(.system(size: 24, weight: .bold, design: .rounded))
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
+                .background(
+                    LinearGradient(
+                        colors: [Color.oshiPink, Color.oshiPink],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+                .cornerRadius(20)
+                .padding(.horizontal, 24)
             } else {
                 // 通常のメッセージ（タップでトレーニング選択へ）
-                Text(viewModel.currentDialogue)
-                    .font(.system(size: 18, weight: .medium, design: .rounded))
-                    .foregroundColor(.oshiTextPrimary)
-                    .onTapGesture {
-                        showTrainingPopup = true
-                        viewModel.updateDialogue(for: .trainingStart)
-                    }
+                VStack(spacing: 4) {
+                    // キャラ名
+                    Text(viewModel.currentTrainer.name)
+                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                        .foregroundColor(.oshiTextSecondary)
+
+                    Text(viewModel.currentDialogue)
+                        .font(.system(size: 18, weight: .medium, design: .rounded))
+                        .foregroundColor(.oshiTextPrimary)
+                        .onTapGesture {
+                            showTrainingPopup = true
+                            viewModel.updateDialogue(for: .trainingStart)
+                        }
+                }
+                .padding(.horizontal, 24)
+                .padding(.vertical, 16)
+                .frame(maxWidth: .infinity)
+                .background(
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(Color.oshiBackgroundSecondary)
+                        .shadow(color: .black.opacity(0.15), radius: 12, x: 0, y: 4)
+                )
+                .multilineTextAlignment(.center)
             }
         }
-        .padding(.horizontal, 24)
-        .padding(.vertical, 16)
-        .frame(maxWidth: .infinity)
-        .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color.oshiBackgroundSecondary)
-                .shadow(color: .black.opacity(0.15), radius: 12, x: 0, y: 4)
-        )
-        .multilineTextAlignment(.center)
     }
 }
 

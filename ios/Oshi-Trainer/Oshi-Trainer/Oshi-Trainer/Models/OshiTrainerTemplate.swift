@@ -57,6 +57,17 @@ struct OshiTrainerTemplate: Identifiable, Codable {
     /// フィードバック頻度
     var feedbackFrequency: FeedbackFrequency
 
+    // MARK: 画像表示パラメータ
+
+    /// ホーム画面でのキャラクター画像の拡大倍率
+    var homeImageScale: CGFloat
+
+    /// 詳細画面アイコンでのキャラクター画像の拡大倍率
+    var detailIconScale: CGFloat
+
+    /// 詳細画面アイコンでのキャラクター画像の縦方向オフセット
+    var detailIconOffsetY: CGFloat
+
     // MARK: - Initializer
 
     init(
@@ -73,7 +84,10 @@ struct OshiTrainerTemplate: Identifiable, Codable {
         prohibitedWords: [String] = [],
         characterVoice: String = "ずんだもん",
         encouragementStyle: EncouragementStyle = .balanced,
-        feedbackFrequency: FeedbackFrequency = .medium
+        feedbackFrequency: FeedbackFrequency = .medium,
+        homeImageScale: CGFloat = 2.0,
+        detailIconScale: CGFloat = 2.2,
+        detailIconOffsetY: CGFloat = 60
     ) {
         self.id = id
         self.name = name
@@ -89,6 +103,9 @@ struct OshiTrainerTemplate: Identifiable, Codable {
         self.characterVoice = characterVoice
         self.encouragementStyle = encouragementStyle
         self.feedbackFrequency = feedbackFrequency
+        self.homeImageScale = homeImageScale
+        self.detailIconScale = detailIconScale
+        self.detailIconOffsetY = detailIconOffsetY
     }
 }
 
@@ -141,7 +158,10 @@ extension OshiTrainerTemplate {
                 prohibitedWords: template.prohibitedWords,
                 characterVoice: template.characterVoice,
                 encouragementStyle: template.encouragementStyle,
-                feedbackFrequency: template.feedbackFrequency
+                feedbackFrequency: template.feedbackFrequency,
+                homeImageScale: template.homeImageScale,
+                detailIconScale: template.detailIconScale,
+                detailIconOffsetY: template.detailIconOffsetY
             )
         } else {
             // テンプレートがない場合はデフォルト値を使用

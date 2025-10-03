@@ -23,6 +23,9 @@ struct DefaultOshiTrainerData {
         personalityDescription: "ツンデレ",
         characterVoice: "VOICEVOX:ずんだもん",
         encouragementStyle: .balanced,
-        feedbackFrequency: .medium
+        feedbackFrequency: .medium,
+        homeImageScale: 2.0,
+        detailIconScale: 2.2,
+        detailIconOffsetY: 60
     )
 }

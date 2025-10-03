@@ -14,9 +14,14 @@ struct TrainerDetailView: View {
                     .ignoresSafeArea()
 
                 VStack(spacing: 24) {
+                    // タイトル
+                    Text("トレーナー詳細")
+                        .font(.system(size: 28, weight: .bold, design: .rounded))
+                        .foregroundColor(Color.oshiThemeColor(from: template.themeColor))
+                        .padding(.top, 32)
+
                     // キャラクター画像（丸アイコン）
                     characterIconView
-                        .padding(.top, 32)
 
                     // 詳細情報
                     detailsView
@@ -39,6 +44,8 @@ struct TrainerDetailView: View {
         Image(template.characterImage)
             .resizable()
             .scaledToFill()
+            .scaleEffect(template.detailIconScale)
+            .offset(y: template.detailIconOffsetY)
             .frame(width: 120, height: 120)
             .clipShape(Circle())
             .overlay(
