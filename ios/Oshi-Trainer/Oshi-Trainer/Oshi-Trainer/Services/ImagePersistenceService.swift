@@ -16,16 +16,33 @@ class ImagePersistenceService {
     /// 画像保存ディレクトリのURL
     private let imageDirectory: URL
 
+    /// App Group ID
+    private let appGroupId = "group.com.yourcompany.VirtualTrainer"
+
+    /// App Group共有コンテナのURL
+    private var appGroupContainer: URL? {
+        FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupId)
+    }
+
     // MARK: - Initialization
 
     init() throws {
-        // Documentsディレクトリを取得
-        guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            throw ImagePersistenceError.directoryCreationFailed
+        // App Group共有コンテナを優先的に使用
+        let baseDirectory: URL
+        if let appGroupURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupId) {
+            baseDirectory = appGroupURL
+            print("✅ App Groupコンテナを使用: \(appGroupURL.path)")
+        } else {
+            // App Groupが利用できない場合はDocumentsディレクトリにフォールバック
+            guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+                throw ImagePersistenceError.directoryCreationFailed
+            }
+            baseDirectory = documentsDirectory
+            print("⚠️ App Groupが利用できません。Documentsディレクトリを使用: \(documentsDirectory.path)")
         }
 
         // TrainerImagesディレクトリのパスを作成
-        imageDirectory = documentsDirectory.appendingPathComponent("TrainerImages")
+        imageDirectory = baseDirectory.appendingPathComponent("TrainerImages")
 
         // ディレクトリが存在しない場合は作成
         if !FileManager.default.fileExists(atPath: imageDirectory.path) {
@@ -108,5 +125,52 @@ class ImagePersistenceService {
             print("❌ 画像削除エラー: \(error)")
             return .failure(.deleteFailed)
         }
+    }
+
+    // MARK: - Asset Image Migration
+
+    /// Assets.xcassetsの画像をApp Groupコンテナにコピー
+    /// - Parameter assetName: Assets内の画像名（例: "Oshino-Ai"）
+    /// - Returns: 成功時はファイル名（assetName.png）、失敗時はnil
+    func copyAssetImageToAppGroup(assetName: String) -> String? {
+        // UIImageとしてAssetsから読み込み
+        guard let image = UIImage(named: assetName) else {
+            print("⚠️ Assetsから画像を読み込めません: \(assetName)")
+            return nil
+        }
+
+        // PNG形式のDataに変換
+        guard let imageData = image.pngData() else {
+            print("❌ 画像のPNG変換に失敗しました: \(assetName)")
+            return nil
+        }
+
+        // ファイル名を生成（拡張子付き）
+        let fileName = "\(assetName).png"
+        let fileURL = imageDirectory.appendingPathComponent(fileName)
+
+        // 既にファイルが存在する場合はスキップ
+        if FileManager.default.fileExists(atPath: fileURL.path) {
+            print("ℹ️ 画像は既に存在します: \(fileName)")
+            return fileName
+        }
+
+        // ファイルに保存
+        do {
+            try imageData.write(to: fileURL)
+            print("✅ Assetsの画像をApp Groupにコピーしました: \(fileName)")
+            return fileName
+        } catch {
+            print("❌ 画像コピーエラー: \(error)")
+            return nil
+        }
+    }
+
+    /// 画像の存在確認
+    /// - Parameter fileName: 画像ファイル名
+    /// - Returns: 存在すればtrue
+    func imageExists(fileName: String) -> Bool {
+        let fileURL = imageDirectory.appendingPathComponent(fileName)
+        return FileManager.default.fileExists(atPath: fileURL.path)
     }
 }

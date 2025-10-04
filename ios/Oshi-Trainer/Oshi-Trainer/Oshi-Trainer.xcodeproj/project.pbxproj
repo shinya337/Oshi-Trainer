@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		D5AE69932E91B3F2006B8BAA /* NotificationServiceExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D5AE698C2E91B3F2006B8BAA /* NotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		D5881E052E8D70AA0094B0F5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -21,17 +25,59 @@
 			remoteGlobalIDString = D5881DF62E8D70A90094B0F5;
 			remoteInfo = "Oshi-Trainer";
 		};
+		D5AE69912E91B3F2006B8BAA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D5881DEF2E8D70A90094B0F5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D5AE698B2E91B3F2006B8BAA;
+			remoteInfo = NotificationServiceExtension;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D5AE69982E91B3F2006B8BAA /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				D5AE69932E91B3F2006B8BAA /* NotificationServiceExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		D5881DF72E8D70A90094B0F5 /* Oshi-Trainer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Oshi-Trainer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5881E042E8D70AA0094B0F5 /* Oshi-TrainerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Oshi-TrainerTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5881E0E2E8D70AA0094B0F5 /* Oshi-TrainerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Oshi-TrainerUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D5AE698C2E91B3F2006B8BAA /* NotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		D5AE69942E91B3F2006B8BAA /* Exceptions for "NotificationServiceExtension" folder in "NotificationServiceExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = D5AE698B2E91B3F2006B8BAA /* NotificationServiceExtension */;
+		};
+		D5AE69A92E91BFCD006B8BAA /* Exceptions for "Oshi-Trainer" folder in "Oshi-Trainer" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = D5881DF62E8D70A90094B0F5 /* Oshi-Trainer */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		D5881DF92E8D70A90094B0F5 /* Oshi-Trainer */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D5AE69A92E91BFCD006B8BAA /* Exceptions for "Oshi-Trainer" folder in "Oshi-Trainer" target */,
+			);
 			path = "Oshi-Trainer";
 			sourceTree = "<group>";
 		};
@@ -43,6 +89,14 @@
 		D5881E112E8D70AA0094B0F5 /* Oshi-TrainerUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "Oshi-TrainerUITests";
+			sourceTree = "<group>";
+		};
+		D5AE698D2E91B3F2006B8BAA /* NotificationServiceExtension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D5AE69942E91B3F2006B8BAA /* Exceptions for "NotificationServiceExtension" folder in "NotificationServiceExtension" target */,
+			);
+			path = NotificationServiceExtension;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -69,6 +123,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D5AE69892E91B3F2006B8BAA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -78,6 +139,7 @@
 				D5881DF92E8D70A90094B0F5 /* Oshi-Trainer */,
 				D5881E072E8D70AA0094B0F5 /* Oshi-TrainerTests */,
 				D5881E112E8D70AA0094B0F5 /* Oshi-TrainerUITests */,
+				D5AE698D2E91B3F2006B8BAA /* NotificationServiceExtension */,
 				D5881DF82E8D70A90094B0F5 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -88,6 +150,7 @@
 				D5881DF72E8D70A90094B0F5 /* Oshi-Trainer.app */,
 				D5881E042E8D70AA0094B0F5 /* Oshi-TrainerTests.xctest */,
 				D5881E0E2E8D70AA0094B0F5 /* Oshi-TrainerUITests.xctest */,
+				D5AE698C2E91B3F2006B8BAA /* NotificationServiceExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -102,10 +165,12 @@
 				D5881DF32E8D70A90094B0F5 /* Sources */,
 				D5881DF42E8D70A90094B0F5 /* Frameworks */,
 				D5881DF52E8D70A90094B0F5 /* Resources */,
+				D5AE69982E91B3F2006B8BAA /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				D5AE69922E91B3F2006B8BAA /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				D5881DF92E8D70A90094B0F5 /* Oshi-Trainer */,
@@ -163,6 +228,28 @@
 			productReference = D5881E0E2E8D70AA0094B0F5 /* Oshi-TrainerUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		D5AE698B2E91B3F2006B8BAA /* NotificationServiceExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D5AE69952E91B3F2006B8BAA /* Build configuration list for PBXNativeTarget "NotificationServiceExtension" */;
+			buildPhases = (
+				D5AE69882E91B3F2006B8BAA /* Sources */,
+				D5AE69892E91B3F2006B8BAA /* Frameworks */,
+				D5AE698A2E91B3F2006B8BAA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				D5AE698D2E91B3F2006B8BAA /* NotificationServiceExtension */,
+			);
+			name = NotificationServiceExtension;
+			packageProductDependencies = (
+			);
+			productName = NotificationServiceExtension;
+			productReference = D5AE698C2E91B3F2006B8BAA /* NotificationServiceExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -184,6 +271,9 @@
 						CreatedOnToolsVersion = 26.0;
 						TestTargetID = D5881DF62E8D70A90094B0F5;
 					};
+					D5AE698B2E91B3F2006B8BAA = {
+						CreatedOnToolsVersion = 26.0;
+					};
 				};
 			};
 			buildConfigurationList = D5881DF22E8D70A90094B0F5 /* Build configuration list for PBXProject "Oshi-Trainer" */;
@@ -203,6 +293,7 @@
 				D5881DF62E8D70A90094B0F5 /* Oshi-Trainer */,
 				D5881E032E8D70AA0094B0F5 /* Oshi-TrainerTests */,
 				D5881E0D2E8D70AA0094B0F5 /* Oshi-TrainerUITests */,
+				D5AE698B2E91B3F2006B8BAA /* NotificationServiceExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -223,6 +314,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		D5881E0C2E8D70AA0094B0F5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D5AE698A2E91B3F2006B8BAA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -253,6 +351,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D5AE69882E91B3F2006B8BAA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -265,6 +370,11 @@
 			isa = PBXTargetDependency;
 			target = D5881DF62E8D70A90094B0F5 /* Oshi-Trainer */;
 			targetProxy = D5881E0F2E8D70AA0094B0F5 /* PBXContainerItemProxy */;
+		};
+		D5AE69922E91B3F2006B8BAA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D5AE698B2E91B3F2006B8BAA /* NotificationServiceExtension */;
+			targetProxy = D5AE69912E91B3F2006B8BAA /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -395,11 +505,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Oshi-Trainer/Oshi-Trainer.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = Z6635LHDLQ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Oshi-Trainer/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "推しトレ";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "推しトレーナーのキャラクター画像を選択するために、写真ライブラリへのアクセスが必要です。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -429,11 +541,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Oshi-Trainer/Oshi-Trainer.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = Z6635LHDLQ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Oshi-Trainer/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "推しトレ";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "推しトレーナーのキャラクター画像を選択するために、写真ライブラリへのアクセスが必要です。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -542,6 +656,64 @@
 			};
 			name = Release;
 		};
+		D5AE69962E91B3F2006B8BAA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = NotificationServiceExtension/NotificationServiceExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Z6635LHDLQ;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NotificationServiceExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NotificationServiceExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Team.TAKAandMASA.Oshi-Trainer.NotificationServiceExtension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D5AE69972E91B3F2006B8BAA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = NotificationServiceExtension/NotificationServiceExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Z6635LHDLQ;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NotificationServiceExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NotificationServiceExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Team.TAKAandMASA.Oshi-Trainer.NotificationServiceExtension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -577,6 +749,15 @@
 			buildConfigurations = (
 				D5881E1F2E8D70AA0094B0F5 /* Debug */,
 				D5881E202E8D70AA0094B0F5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D5AE69952E91B3F2006B8BAA /* Build configuration list for PBXNativeTarget "NotificationServiceExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D5AE69962E91B3F2006B8BAA /* Debug */,
+				D5AE69972E91B3F2006B8BAA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

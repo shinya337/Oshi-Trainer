@@ -5,6 +5,13 @@ class UserDefaultsDataService: DataServiceProtocol {
     // MARK: - Properties
 
     private let trainerTemplatesKey = "trainerTemplates"
+    private let selectedTrainerIdKey = "selectedTrainerId"
+
+    /// App Group共有UserDefaults
+    private let appGroupId = "group.com.yourcompany.VirtualTrainer"
+    private var sharedDefaults: UserDefaults? {
+        UserDefaults(suiteName: appGroupId)
+    }
 
     // MARK: - DataServiceProtocol (既存メソッド)
 
@@ -144,5 +151,51 @@ class UserDefaultsDataService: DataServiceProtocol {
     func getTrainerTemplate(by id: UUID) -> OshiTrainerTemplate? {
         let templates = getAllTrainerTemplates()
         return templates.first(where: { $0.id == id })
+    }
+
+    // MARK: - App Group共有データ管理
+
+    /// 選択中のトレーナーIDをApp Group共有UserDefaultsに保存
+    func saveSelectedTrainerId(_ trainerId: UUID) {
+        sharedDefaults?.set(trainerId.uuidString, forKey: selectedTrainerIdKey)
+        print("✅ App Groupに選択中トレーナーIDを保存: \(trainerId)")
+    }
+
+    /// App Group共有UserDefaultsから選択中のトレーナーIDを取得
+    func getSelectedTrainerId() -> UUID? {
+        guard let idString = sharedDefaults?.string(forKey: selectedTrainerIdKey),
+              let id = UUID(uuidString: idString) else {
+            return nil
+        }
+        return id
+    }
+
+    /// 全トレーナーテンプレートをApp Group共有UserDefaultsに保存
+    func syncTrainerTemplatesToAppGroup() {
+        let templates = getAllTrainerTemplates()
+        let encoder = JSONEncoder()
+        do {
+            let data = try encoder.encode(templates)
+            sharedDefaults?.set(data, forKey: trainerTemplatesKey)
+            print("✅ App Groupに全トレーナーテンプレートを同期: \(templates.count)件")
+        } catch {
+            print("❌ App Groupへのトレーナーテンプレート同期エラー: \(error)")
+        }
+    }
+
+    /// App Group共有UserDefaultsから全トレーナーテンプレートを取得
+    func getTrainerTemplatesFromAppGroup() -> [OshiTrainerTemplate]? {
+        guard let data = sharedDefaults?.data(forKey: trainerTemplatesKey) else {
+            return nil
+        }
+
+        let decoder = JSONDecoder()
+        do {
+            let templates = try decoder.decode([OshiTrainerTemplate].self, from: data)
+            return templates
+        } catch {
+            print("❌ App Groupからのトレーナーテンプレート取得エラー: \(error)")
+            return nil
+        }
     }
 }

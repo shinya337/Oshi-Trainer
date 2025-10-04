@@ -2,6 +2,8 @@ import SwiftUI
 
 struct SettingsView: View {
     var themeColor: String = "pink"
+    var selectedTrainer: OshiTrainerTemplate?
+    @StateObject private var viewModel = SettingsViewModel()
 
     var body: some View {
         ZStack {
@@ -30,6 +32,11 @@ struct SettingsView: View {
                     .foregroundColor(Color.oshiThemeColor(from: themeColor))
             }
         }
+        .alert("通知テスト", isPresented: $viewModel.showNotificationAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(viewModel.notificationTestResult)
+        }
     }
 
     // MARK: - Settings Section
@@ -40,6 +47,31 @@ struct SettingsView: View {
                 .foregroundColor(.oshiTextPrimary)
 
             VStack(spacing: 0) {
+                // 通知テストボタン
+                Button(action: {
+                    viewModel.sendTestNotification(trainer: selectedTrainer)
+                }) {
+                    HStack(spacing: 16) {
+                        Image(systemName: "bell.badge.fill")
+                            .font(.system(size: 20))
+                            .foregroundColor(.oshiAccent)
+                            .frame(width: 32)
+
+                        Text("通知テスト")
+                            .font(.system(size: 16, weight: .semibold, design: .rounded))
+                            .foregroundColor(.oshiTextPrimary)
+
+                        Spacer()
+
+                        Image(systemName: "paperplane.fill")
+                            .font(.system(size: 14))
+                            .foregroundColor(.oshiAccent)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                }
+                Divider().padding(.leading, 56)
+
                 settingRow(
                     icon: "bell.fill",
                     title: "通知設定",

@@ -132,7 +132,10 @@ struct HomeView: View {
             Spacer()
 
             // 右上：設定ボタン
-            NavigationLink(destination: SettingsView(themeColor: viewModel.oshiTemplate.themeColor)) {
+            NavigationLink(destination: SettingsView(
+                themeColor: viewModel.oshiTemplate.themeColor,
+                selectedTrainer: viewModel.currentTemplate
+            )) {
                 VStack(spacing: 4) {
                     Image(systemName: "gearshape.fill")
                         .font(.system(size: 32))
