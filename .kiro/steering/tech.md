@@ -1,350 +1,176 @@
-# Technology Stack - Oshi-Trainer
-
-**Inclusion Mode**: Always
+# Technology Stack
 
 ## Architecture
 
-### Application Type
-- **Platform**: iOS Native Application
-- **UI Framework**: SwiftUI
-- **Architecture Pattern**: MVVM (推奨)
-- **Development Environment**: Xcode 26.0, iOS 26
-- **Minimum Deployment Target**: iOS 26
-
-### Design Patterns
-- **SwiftUI Declarative UI**: 宣言的UIによる状態管理とビュー構築
-- **Combine Framework**: リアクティブプログラミングとデータフロー管理（今後活用予定）
-- **Protocol-Oriented Programming**: Swiftのプロトコル指向設計
-  - **実装例**: `DataServiceProtocol` - データアクセス層の抽象化
-  - テスタビリティとモック実装の容易性を提供
-
-### AI & Machine Learning
-
-#### iOS (計画中)
-- **Vision Framework**: カメラベースの姿勢推定とリアルタイムフォーム解析
-- **Core ML**: オンデバイス機械学習モデルの実行
-- **AVFoundation**: カメラキャプチャとビデオ処理
-- **LLM Integration** (Future): 推しトレーナーのパーソナリティ生成とセリフ生成
-- **Speech Synthesis** (Future): 推しの声によるフィードバック
-
-#### Pythonプロトタイプ（実験中）
-**技術スタック**:
-- **YOLO Pose Estimation**: YOLOv11n-poseモデル（`yolo11n-pose.pt`, 6.2MB）
-- **OpenCV**: リアルタイムビデオ処理とカメラキャプチャ
-- **Ultralytics**: YOLOモデル推論エンジン
-- **NumPy**: 数値計算とキーポイント解析
-- **pygame**: 音声フィードバック再生
-- **Collections (deque)**: スムージング用の履歴管理
-
-**実装済みエクササイズ**:
-- **オーバーヘッドプレス**（`main_overheadpress.py`）:
-  - ルールベース判定: 肘の開きエラー（肩幅正規化）、速度判定、角度ベースレップカウント
-  - ずんだもん音声フィードバック（48音声ファイル使用）
-  - キーポイント: 肩、肘、手首
-
-**モデル変換ツール**:
-- **convert_models.py**: YOLOモデルをCore ML形式に変換するユーティリティ
-  - iOS統合のためのモデル変換スクリプト
-  - CoreMLTools活用
+**ネイティブiOSアプリケーション**
+- SwiftUI + MVVM アーキテクチャ
+- App Group共有ストレージ（メインアプリ ⇄ Notification Service Extension）
+- Communication Notifications API統合（iOS 15+）
 
 ## Frontend
 
-### Core Technologies
-- **Language**: Swift 6.x
-- **UI Framework**: SwiftUI
-- **Navigation**: NavigationStack
-- **State Management**: @State, @Binding, @ObservableObject, @EnvironmentObject
+### UI Framework
+- **SwiftUI** - 宣言的UIフレームワーク
+- **Combine** - リアクティブプログラミング（ObservableObject）
 
-### UI Components
-- **Native SwiftUI Views**: Text, Image, VStack, HStack, NavigationStack, etc.
-- **SF Symbols**: システムアイコンライブラリ
-- **Custom Components**: プロジェクト固有のカスタムビューコンポーネント
-- **Implemented Custom Components**:
-  - `OshiButtonStyle`: ウマ娘風のボタンスタイル（Primary, Secondary, Icon）
-  - `OshiTextStyles`: カスタムテキストスタイル（タイトル、数字表示など）
-  - `Color+Oshi`: ウマ娘風カラーパレット拡張
-    - `oshiBackground`, `oshiBackgroundSecondary`
-    - `oshiGreen`, `oshiTextPrimary`, `oshiTextSecondary`など
-  - `TransparentImageView`: 背景透過PNG画像の表示用カスタムビュー
-  - `AlphaHitTestImageView`: アルファ値ベースのタップ領域判定を実装したUIImageView
+### デザインシステム
+- カスタムカラーパレット（`Color+Extensions.swift`）
+  - `oshiBackground`, `oshiBackgroundSecondary`
+  - `oshiTextPrimary`, `oshiTextSecondary`
+  - `oshiAccent`, `oshiAccentSecondary`
+  - 動的テーマカラー（pink, blue, green, orange, purple）
+- カスタムフォントスタイル（`Font+Extensions.swift`）
+  - `oshiNumberStyle()`, `oshiHeadlineStyle()`
+- カスタムボタンスタイル
+  - `OshiButtonStyle`, `OshiIconButtonStyle`
 
-## Data & Storage
+### 画像処理
+- `UIImage` - トレーナー画像の読み込み・加工
+- `UIGraphicsImageRenderer` - 通知アイコン用画像生成
+- PNG形式での保存・読み込み
 
-### Local Storage Options
-- **UserDefaults**: 設定や小規模データの永続化（✅ トレーナーテンプレートで使用中）
-- **FileManager**: ファイルベースのデータ管理（✅ トレーナー画像で使用中）
-- **Core Data**: 構造化データの永続化（今後実装予定）
+## Backend / Services
 
-### Data Service Layer
-- **DataServiceProtocol**: データアクセスの抽象化レイヤー
-  - `getOshiTrainer()`: 推しトレーナーデータの取得
-  - `getLevelData()`: レベル、経験値、実績データの取得
-  - `getStatistics()`: 統計データの取得
-  - `getAllTrainerTemplates()`: 全トレーナーテンプレートの取得
-  - `saveTrainerTemplate(_:)`: トレーナーテンプレートの保存
-  - `getTrainerTemplate(by:)`: ID指定トレーナーテンプレートの取得
+### データ永続化
+- **UserDefaults** - トレーナーテンプレート、設定の保存
+- **App Group UserDefaults** - Extension間データ共有
+  - App Group ID: `group.com.yourcompany.VirtualTrainer`
+- **FileManager** - トレーナー画像の保存
+  - App Groupコンテナ: `TrainerImages/`ディレクトリ
 
-- **MockDataService**: 開発用モックデータサービス（`DataServiceProtocol`の実装）
-  - UI開発時のダミーデータ提供
-  - メモリ内トレーナーテンプレート管理
-  - デフォルト推しトレーナー「推乃 愛」のデータ提供
+### 通知システム
+- **UNUserNotificationCenter** - ローカル通知管理
+- **Communication Notifications API** (iOS 15+)
+  - `INPerson` - トレーナー情報の表現
+  - `INSendMessageIntent` - メッセージ通知Intent
+  - `content.updating(from:)` - Intentから通知コンテンツ生成
+- **Notification Service Extension** - リモート通知対応（将来用）
 
-- **UserDefaultsDataService**: UserDefaultsベースのデータ永続化（✅ 実装済み）
-  - JSONエンコード/デコードによるトレーナーテンプレート保存
-  - 保存キー: `"trainerTemplates"`
-  - デフォルトトレーナー + ユーザー作成トレーナーの管理
-  - アプリ再起動後もデータ保持
-
-- **ImagePersistenceService**: 画像ファイル管理サービス（✅ 実装済み）
-  - **保存場所**: `Documents/TrainerImages/` ディレクトリ
-  - **ファイル形式**: PNG形式、UUID.pngファイル名
-  - **機能**:
-    - `saveImage(_:)`: UIImageをPNG形式で保存、UUIDファイル名を返却
-    - `loadImage(fileName:)`: ファイル名からUIImageを読み込み
-    - `deleteImage(fileName:)`: 画像ファイルの削除
-  - **エラーハンドリング**: ディレクトリ作成失敗、画像変換失敗、保存失敗
-
-- **DialogueTemplateProvider**: テンプレートセリフ提供サービス
-  - ツンデレ性格のセリフテンプレート管理
-  - カテゴリー別セリフ取得（挨拶、トレーニング開始、応援、照れ隠し）
-  - 将来的なLLM統合への移行を考慮した設計
-
-### Data Persistence Strategy
-現在の実装（ライトウェイト、~10トレーナー想定）:
-- **トレーナーテンプレート**: UserDefaults（JSON形式）
-- **画像ファイル**: ファイルシステム（Documents/TrainerImages/）
-- **画像参照**: テンプレート内にファイル名（UUID.png）を保存
-
-将来的な移行（トレーナー数増加時）:
-- Core Dataへの移行を検討（100人以上、複雑な検索が必要になった場合）
-- iCloud同期機能の追加
-
-### Audio Feedback Service
-- **AudioFeedbackServiceProtocol**: 音声フィードバック機能の抽象化
-- **AudioFeedbackService**: 音声フィードバックの実装（ずんだもん/四国めたん対応）
-  - **AVAudioPlayerベース**: キュー管理方式の音声再生
-  - **レップカウント**: `playRepCount(_ count: Int)` - 1〜40回のカウント音声
-  - **タイマーアラート**: `playTimerAlert(_ secondsRemaining: Int)` - 5/10/30秒警告、完了通知
-  - **フォームエラー**: `playElbowError()`, `playElbowFlareError()` - 肘開きエラー等の警告
-  - **速度フィードバック**: `playTooFast()`, `playTooSlow()` - 早すぎる/遅すぎる警告
-  - **ボイス切り替え**: `setVoice(_ voiceName: String)` - ずんだもん/四国めたん切り替え（✅ 実装済み）
-  - **キュー式再生**: 複数音声の順次再生管理（AVAudioPlayerDelegate）
-  - **リソース管理**: Bundle内のWAVファイルへのアクセス管理（動的パス解決）
-
-### Data Models
-- **Swift Structs/Classes**: データモデルの定義
-- **Codable Protocol**: JSON エンコード/デコード（今後のサーバー連携用）
-- **実装済みモデル**:
-  - `OshiTrainer`: 推しトレーナーのデータモデル（名前、レベル、経験値、画像、セリフ）
-  - `DefaultOshiTrainerData`: デフォルト推しトレーナー「推乃 愛」のデータ定義
-  - `OshiTrainerTemplate`: 推しトレーナーテンプレートモデル
-    - 基本プロフィール（名前、テーマカラー、キャラクター画像）
-    - 性格・口調パラメータ（一人称、二人称、性格説明）
-    - LLM統合パラメータ（プロンプト指示、参考口調、禁止ワード）
-    - 音声・ボイスパラメータ（CV、音声スタイル）
-    - トレーニング設定（応援スタイル、フィードバック頻度、リアルタイム対応）
-  - `PersonalityType`: 性格タイプ（優しい、元気、クール、ツンデレ、厳しい）
-  - `EncouragementStyle`: 応援スタイル（熱血、冷静、自然、過保護）
-  - `FeedbackFrequency`: フィードバック頻度（最小限、適度、頻繁、常時）
-  - `Achievement`: 実績・アチーブメントモデル
-  - `Statistics`: 統計データモデル（`MonthlyStatistic`, `CategoryStatistic`）
-  - `TrainingSession`: トレーニングセッション記録モデル
-
-### Audio Assets
-- **Voice System**: 96音声ファイル（2キャラクター対応）
-
-  **ずんだもん音声システム**（48ファイル）:
-  - **Rep Count Audio**: レップカウント音声（`zunda_rep_1.wav`〜`zunda_rep_40.wav`、40ファイル）
-  - **Timer Audio**: タイマー音声（`zunda_start.wav`, `zunda_5_seconds.wav`, `zunda_10_seconds.wav`, `zunda_30_seconds.wav`, `zunda_complete.wav`、5ファイル）
-  - **Form Error Audio**: フォームエラー音声（`zunda_elbow-error.wav`、1ファイル）
-  - **Speed Audio**: 速度フィードバック音声（`zunda_too-fast.wav`, `zunda_too-slow.wav`、2ファイル）
-
-  **四国めたん音声システム**（48ファイル）:
-  - **Rep Count Audio**: レップカウント音声（`shikoku_rep_1.wav`〜`shikoku_rep_40.wav`、40ファイル）
-  - **Timer Audio**: タイマー音声（`shikoku_start.wav`, `shikoku_5_seconds.wav`, `shikoku_10_seconds.wav`, `shikoku_30_seconds.wav`, `shikoku_complete.wav`、5ファイル）
-  - **Form Error Audio**: フォームエラー音声（`shikoku_elbow-error.wav`、1ファイル）
-  - **Speed Audio**: 速度フィードバック音声（`shikoku_too-fast.wav`, `shikoku_too-slow.wav`、2ファイル）
-
-  - **Format**: WAV形式（iOS上でAVFoundationで再生）
-  - **Location**:
-    - ソースファイル: `audio/ずんだもん/`, `audio/四国めたん/`
-    - iOS統合: `Resources/Audio/ずんだもん/`, `Resources/Audio/四国めたん/`
-  - **Usage**: リアルタイムフォーム解析機能の音声フィードバック、キャラクター別音声選択
+### サービスレイヤー
+- `DataServiceProtocol` - データアクセス抽象化
+- `UserDefaultsDataService` - UserDefaults実装
+- `ImagePersistenceService` - 画像保存・読み込み
+- `NotificationScheduler` - 通知スケジューリング
+- `INPersonBuilder` - INPerson生成（スケール・オフセット調整）
+- `INSendMessageIntentBuilder` - INSendMessageIntent生成
 
 ## Development Environment
 
-### Required Tools
-- **Xcode**: 26.0（最新バージョン）
-- **macOS**: 最新バージョン
-- **iOS Simulator**: iOS 26対応
-- **Git**: バージョン管理
+### 必須ツール
+- **Xcode** 15.0+ - iOS開発IDE
+- **iOS Simulator** または 実機（iOS 16.0+）
+- **Git** - バージョン管理
 
-### Optional Tools
-- **SF Symbols App**: アイコン選択用
-- **Instruments**: パフォーマンス分析
-- **Physical iOS Device**: 実機テスト
+### 開発言語
+- **Swift** 5.9+
+- **SwiftUI** - UIフレームワーク
 
-## Common Commands
-
-### Python Prototype
-```bash
-# Pythonプロトタイプの実行（カメラ必須）
-cd python
-
-# オーバーヘッドプレス解析
-python main_overheadpress.py
-
-# 依存関係インストール（初回のみ）
-pip install ultralytics opencv-python numpy pygame
-
-# 終了: 'q'キーを押す
-```
-
-### Xcode Build & Run
-```bash
-# コマンドラインビルド（必要に応じて）
-xcodebuild -project ios/Oshi-Trainer/Oshi-Trainer.xcodeproj -scheme Oshi-Trainer -configuration Debug
-
-# 通常はXcode IDEから実行
-# Cmd + R : ビルドして実行
-# Cmd + B : ビルドのみ
-# Cmd + U : テスト実行
-```
-
-### Testing
-```bash
-# ユニットテストの実行
-xcodebuild test -project ios/Oshi-Trainer/Oshi-Trainer.xcodeproj -scheme Oshi-Trainer -destination 'platform=iOS Simulator,name=iPhone 15'
-
-# 通常はXcode IDEから実行
-# Cmd + U : テスト実行
-```
-
-### Git Operations
-```bash
-# 変更の確認
-git status
-
-# コミット
-git add .
-git commit -m "commit message"
-
-# プッシュ
-git push origin main
-```
+### ビルド設定
+- Deployment Target: **iOS 16.0**
+- Swift Language Version: **Swift 5**
 
 ## Project Configuration
 
-### Bundle Identifier
-- 形式: `com.yourcompany.Oshi-Trainer`
-- プロジェクト設定で確認・変更可能
+### Capabilities
+- **Communication Notifications**
+  - Entitlement: `com.apple.developer.usernotifications.communication`
+- **App Groups**
+  - Group ID: `group.com.yourcompany.VirtualTrainer`
+- **Push Notifications**（準備済み）
 
-### Build Configurations
-- **Debug**: 開発用ビルド設定
-- **Release**: リリース用ビルド設定
+### Entitlements
+- **メインアプリ**: `Oshi-Trainer.entitlements`
+  - Communication Notifications
+  - App Groups
+- **Notification Service Extension**: `NotificationServiceExtension.entitlements`
+  - App Groups
 
-### Capabilities（今後追加予定）
-- **Camera Access**: リアルタイム姿勢推定のための必須機能
-- **HealthKit**: フィットネスデータアクセスと統計管理
-- **Push Notifications**: 推しからのトレーニング通知
-- **Calendar Access**: Googleカレンダー連携による最適なタイミングの通知
-- **iCloud**: データ同期とバックアップ
-- **Background Modes**: バックグラウンドでの通知処理
+### Info.plist設定
+- **NSUserActivityTypes**: `INSendMessageIntent`
+  - Communication Notifications donateに必要
 
-## Testing Framework
+## Common Commands
 
-### Unit Testing
-- **XCTest**: Swift標準テストフレームワーク
-- **Test Files**:
-  - `Oshi_TrainerTests.swift`: 基本ユニットテスト
-  - `DefaultOshiTrainerDataTests.swift`: デフォルトトレーナーデータのテスト
-  - `DialogueTemplateProviderTests.swift`: セリフテンプレートサービスのテスト
-  - `HomeViewModelTests.swift`: ホーム画面ViewModelのテスト
-  - `MockDataServiceTests.swift`: モックデータサービスのテスト
-  - `OshiTrainerTemplateTests.swift`: テンプレートモデルのテスト
-  - `OshiTrainerTemplateIntegrationTests.swift`: テンプレート統合テスト
-  - `PersonalityTypeTests.swift`: 性格タイプのテスト
-  - `TrainingParametersTests.swift`: トレーニングパラメータのテスト
-  - `ColorOshiThemeTests.swift`: カラーテーマのテスト
-  - `Oshi_TrainerUITests.swift`: UIテスト
-  - `Oshi_TrainerUITestsLaunchTests.swift`: 起動テスト
+### ビルド・実行
+```bash
+# Xcodeでプロジェクトを開く
+open ios/Oshi-Trainer/Oshi-Trainer/Oshi-Trainer.xcodeproj
 
-### Testing Best Practices
-- ビジネスロジックのユニットテスト
-- UI要素の統合テスト
-- TDD（Test-Driven Development）の推奨
-- テンプレートシステムの包括的テストカバレッジ
+# シミュレータでビルド（コマンドライン）
+xcodebuild -scheme Oshi-Trainer -destination 'platform=iOS Simulator,name=iPhone 15' build
 
-## Code Style & Conventions
-
-### Swift Style Guidelines
-- SwiftLint（導入推奨）: コードスタイルの一貫性
-- Swift API Design Guidelines に準拠
-- 命名規則: camelCase for variables/functions, PascalCase for types
-
-### File Organization
-- 1ファイル1タイプの原則
-- 関連するファイルはグループ化
-- テストファイルは対応する実装ファイルと同じ構造
-
-## Performance Considerations
-
-### SwiftUI Optimization
-- @State の適切な使用
-- 不要な再レンダリングの回避
-- Lazy Stack の活用
-
-### Memory Management
-- ARC（Automatic Reference Counting）
-- Weak/Unowned 参照によるメモリリーク防止
-
-## External Integrations & Services
-
-### Current Stage
-現在は外部統合は実装されていませんが、以下の統合が計画されています：
-
-### Future Integrations
-- **Google Calendar API**: ユーザーの予定把握と最適なトレーニングタイミングの提案
-- **LLM API Integration**: 推しトレーナーのパーソナリティ生成と動的なセリフ生成
-  - OpenAI API / Anthropic Claude API / その他のLLMサービス
-- **Text-to-Speech Services**: 推しの声によるフィードバック生成
-- **Backend Services** (Future):
-  - ランキングシステム
-  - ユーザー間のデータ共有
-  - 推しトレーナーのグローバル統計
-
-### Data Privacy & Security
-- **オンデバイス処理優先**: 姿勢推定などはCore MLでオンデバイス実行
-- **最小限のデータ送信**: LLM統合時も必要最小限のデータのみを外部送信
-- **ユーザー同意**: 外部サービス利用時は明示的な同意を取得
-
-## Dependencies Management
-
-### iOS Dependencies
-現在、iOSアプリでは外部依存関係は使用していません。必要に応じて以下のツールで管理：
-
-- **Swift Package Manager (SPM)**: 推奨
-  - Vision/Core ML関連の追加ライブラリ
-  - ネットワーキングライブラリ（Alamofire等）
-  - JSON処理ライブラリ
-- **CocoaPods**: 代替オプション
-- **Carthage**: 代替オプション
-
-#### Planned iOS Dependencies
-- **Pose Estimation Models**: Core ML形式の姿勢推定モデル
-- **Networking**: APIクライアント（LLM統合用）
-- **Calendar Integration**: Google Calendar SDK
-- **Analytics** (Optional): ユーザー行動分析
-
-### Python Prototype Dependencies
-Pythonプロトタイプで使用中のライブラリ：
-
-```python
-# 主要な依存関係
-ultralytics      # YOLOv11 Pose推論エンジン
-opencv-python    # ビデオ処理とカメラキャプチャ
-numpy            # 数値計算
-pygame           # 音声再生
+# 実機でビルド
+# Xcodeから直接実行（通知機能は実機推奨）
 ```
 
-**依存関係管理**: `requirements.txt`またはPipenvで管理可能（現在は未設定）
+### テスト
+```bash
+# ユニットテスト実行
+xcodebuild test -scheme Oshi-Trainer -destination 'platform=iOS Simulator,name=iPhone 15'
+```
+
+### Git操作
+```bash
+# ブランチ作成
+git checkout -b feature/new-feature
+
+# コミット
+git add .
+git commit -m "feat: 新機能の実装"
+
+# プッシュ
+git push origin feature/new-feature
+```
+
+## Environment Variables
+
+現在、環境変数は使用していません。将来的なバックエンド統合時に追加予定。
+
+## Port Configuration
+
+ローカル開発では特定のポート設定は不要（ネイティブiOSアプリのため）。
+
+## Dependencies
+
+### iOS Frameworks
+- **SwiftUI** - UIフレームワーク
+- **Combine** - リアクティブプログラミング
+- **UserNotifications** - 通知管理
+- **Intents** - Communication Notifications
+- **UIKit** - 画像処理
+- **Foundation** - 基本機能
+- **os.log** - ロギング（Notification Service Extension）
+
+### 外部ライブラリ
+現在、外部パッケージマネージャ（CocoaPods, SPM）は使用していません。すべてネイティブフレームワークで実装。
+
+## Code Organization Principles
+
+### MVVM パターン
+- **Model**: データ構造（`OshiTrainer`, `OshiTrainerTemplate`）
+- **View**: SwiftUIビュー（`HomeView`, `SettingsView`）
+- **ViewModel**: ビジネスロジック（`HomeViewModel`, `SettingsViewModel`）
+
+### Protocol-Oriented Programming
+- `DataServiceProtocol` - データアクセスの抽象化
+- `NotificationSchedulerProtocol` - 通知スケジューリングの抽象化
+
+### Dependency Injection
+- ViewModelでサービスをインスタンス化
+- テスト時のモック差し替えを考慮
+
+## Development Workflow
+
+### 推奨開発フロー
+1. Spec-Driven Development（仕様駆動開発）
+   - `.kiro/specs/` で要件・設計を定義
+   - `/kiro:spec-init`, `/kiro:spec-requirements`, `/kiro:spec-design` コマンド使用
+2. タスク分割（`tasks.md`）
+3. TDD（テスト駆動開発）- 将来実装
+4. 実装
+5. コミット
+
+### ブランチ戦略
+- `main` - 本番用ブランチ
+- `feature/*` - 機能開発ブランチ
+- `fix/*` - バグ修正ブランチ
