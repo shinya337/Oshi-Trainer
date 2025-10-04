@@ -41,7 +41,7 @@ class TrainerCreationViewModel: ObservableObject {
     init(
         dataService: DataServiceProtocol = UserDefaultsDataService(),
         imagePersistenceService: ImagePersistenceService? = nil,
-        audioService: AudioFeedbackServiceProtocol = AudioFeedbackService()
+        audioService: AudioFeedbackServiceProtocol = AudioFeedbackService.shared
     ) {
         self.dataService = dataService
 
